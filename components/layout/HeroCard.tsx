@@ -1,7 +1,7 @@
 export const HeroCards = () => {
   return (
     <>
-        <h1>REsume Card</h1>
+      <h1>Here Put some Resume demo</h1>
     </>
-  )
-}
+  );
+};

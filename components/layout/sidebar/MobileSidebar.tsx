@@ -22,7 +22,7 @@ export const MobileSidebar = ({ isOpen, setIsOpen }: MobileSidebarProps) => (
         <SheetHeader className="flex justify-center items-center">
           <SheetTitle>
             <Link href="/">
-              Share My <span className="text-orange-500">Resume</span>.com
+              Share My <span className="bg-gradient-to-r from-[#d17642] via-[#df5607] to-[#d78603] text-transparent bg-clip-text">Resume</span>.com
             </Link>
           </SheetTitle>
         </SheetHeader>

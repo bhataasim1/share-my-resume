@@ -20,7 +20,11 @@ export const Header = () => {
         <NavigationMenuList className="container h-14 px-4 w-screen flex justify-between ">
           <NavigationMenuItem className="flex justify-center">
             <Link href="/" className="ml-2 font-bold">
-              Share My <span className="text-orange-500">Resume</span>.com
+              Share My{" "}
+              <span className="bg-gradient-to-r from-[#d17642] via-[#df5607] to-[#d78603] text-transparent bg-clip-text">
+                Resume
+              </span>
+              .com
             </Link>
           </NavigationMenuItem>
 
@@ -36,7 +40,7 @@ export const Header = () => {
           <div className="hidden md:flex gap-2">
             <ModeToggle />
             <Button variant="outline">Sign In</Button>
-            <Button variant={'destructive'}>Sign Up</Button>
+            <Button variant={"destructive"}>Sign Up</Button>
           </div>
         </NavigationMenuList>
       </NavigationMenu>
