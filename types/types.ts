@@ -22,3 +22,17 @@ export interface NavItemProps {
   path: string;
   initialOpen?: boolean;
 }
+
+export type ModelFormInputType =
+  | "text"
+  | "textarea"
+  | "email"
+  | "password"
+  | "number";
+
+export type UserRegisterType = {
+  name: string;
+  email: string;
+  password: string;
+  username: string;
+};

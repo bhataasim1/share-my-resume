@@ -15,26 +15,25 @@ import { useState } from "react";
 import { set, useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "sonner";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { FormCombinedInput } from "../common/FormCombinedInput";
+import { userDefaultValues } from "@/constant/defaultValyes";
+import { userSigninValidationSchema } from "./zodValidation";
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Enter a valid email address" }),
-  password: z.string().min(2, { message: "Password must be at least 2 chars" }),
-});
 
-type UserFormValue = z.infer<typeof formSchema>;
+
+type UserFormValue = z.infer<typeof userSigninValidationSchema>;
 
 export default function UserLoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
   const [loading, setLoading] = useState(false);
   const defaultValues = {
-    email: "aasim@kampbuzz.com",
-    password: "aasim123",
+    email: userDefaultValues.email,
+    password: userDefaultValues.password,
   };
   const form = useForm<UserFormValue>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(userSigninValidationSchema),
     defaultValues,
   });
   const router = useRouter();
@@ -66,11 +65,12 @@ export default function UserLoginForm() {
       }
     } catch (error) {
       console.error(error);
-      setLoading(false);
       toast.error("An error occurred", {
         description: "Please try again later",
         dismissible: true,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,7 +88,7 @@ export default function UserLoginForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
+                  <FormCombinedInput
                     type="email"
                     placeholder="Enter your email..."
                     disabled={loading}
@@ -107,7 +107,11 @@ export default function UserLoginForm() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" disabled={loading} {...field} />
+                  <FormCombinedInput
+                    type="password"
+                    disabled={loading}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
