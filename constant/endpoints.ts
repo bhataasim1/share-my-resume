@@ -1,2 +1,3 @@
-export const signIn = "/auth/signin";
-export const signUp = "/auth/signup";
+export const LogIn = "/signin";
+export const signUp = "/signup";
+export const dashboard = "/user/dashboard";

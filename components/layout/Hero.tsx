@@ -1,9 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { signIn, signUp } from "@/constant";
+import { LogIn, dashboard, signUp } from "@/constant";
 import { HeroCards } from "./HeroCard";
+import { useSession } from "next-auth/react";
 
-export const Hero = () => {
+export default function Hero() {
+  const { data: session } = useSession();
+
   return (
     <section className="container grid lg:grid-cols-2 place-items-center py-20 md:py-32 gap-10">
       <div className="text-center lg:text-start space-y-6">
@@ -27,14 +32,22 @@ export const Hero = () => {
         </p>
 
         <div className="space-y-4 md:space-y-0 md:space-x-4">
-          <Link href={signIn}>
-            <Button className="w-full md:w-1/3">Sign in</Button>
-          </Link>
-          <Link href={signUp}>
-            <Button className="w-full md:w-1/3 mt-4" variant="destructive">
-              Sign up
-            </Button>
-          </Link>
+          {session ? (
+            <Link href={dashboard}>
+              <Button className="w-full md:w-1/3">Dashboard</Button>
+            </Link>
+          ) : (
+            <>
+              <Link href={LogIn}>
+                <Button className="w-full md:w-1/3">Sign in</Button>
+              </Link>
+              <Link href={signUp}>
+                <Button className="w-full md:w-1/3 mt-4" variant="destructive">
+                  Sign up
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
@@ -44,4 +57,4 @@ export const Hero = () => {
       </div>
     </section>
   );
-};
+}

@@ -7,12 +7,17 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { ModeToggle } from "../ModeToggle";
-import { MobileSidebar } from "./sidebar/MobileSidebar";
+import MobileSidebar from "./sidebar/MobileSidebar";
 import Link from "next/link";
 import DesktopSidebar from "./sidebar/DesktopSidebar";
 import { Button } from "../ui/button";
+import { useSession } from "next-auth/react";
+import { dashboard, signUp } from "@/constant";
+import { LogIn } from "lucide-react";
 
 export const Header = () => {
+  const session = useSession();
+
   const [isOpen, setIsOpen] = useState(false);
   return (
     <header className="sticky border-b-[1px] top-0 z-40 w-full bg-white dark:border-b-slate-700 dark:bg-background">
@@ -39,8 +44,8 @@ export const Header = () => {
 
           <div className="hidden md:flex gap-2">
             <ModeToggle />
-            <Button variant="outline">Sign In</Button>
-            <Button variant={"destructive"}>Sign Up</Button>
+            {/* <Button variant="outline">Sign In</Button>
+            <Button variant={"destructive"}>Sign Up</Button> */}
           </div>
         </NavigationMenuList>
       </NavigationMenu>
