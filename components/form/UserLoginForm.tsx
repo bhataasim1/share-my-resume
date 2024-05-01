@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
@@ -21,12 +21,11 @@ import { Button } from "../ui/button";
 const formSchema = z.object({
   email: z.string().email({ message: "Enter a valid email address" }),
   password: z.string().min(2, { message: "Password must be at least 2 chars" }),
-  isAdmin: z.boolean().optional(),
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
 
-export default function UserAuthForm() {
+export default function UserLoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
   const [loading, setLoading] = useState(false);
@@ -41,27 +40,37 @@ export default function UserAuthForm() {
   const router = useRouter();
 
   const onSubmit = async (data: UserFormValue) => {
-    const response = await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      callbackUrl: callbackUrl ?? "/user/dashboard",
-      redirect: false,
-    });
-    if (response?.error) {
-      if (response.error === "CredentialsSignin") {
-        toast.error("Invalid credentials", {
-          description: "Please check your email and password",
+    try {
+      setLoading(true);
+      const response = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        callbackUrl: callbackUrl ?? "/user/dashboard",
+        redirect: false,
+      });
+      if (response?.error) {
+        if (response.error === "CredentialsSignin") {
+          toast.error("Invalid credentials", {
+            description: "Please check your email and password",
+            dismissible: true,
+          });
+        }
+      }
+
+      if (response?.ok) {
+        toast.success("Logged in successfully", {
+          description: "You are now logged in",
           dismissible: true,
         });
+        router.replace("/user/dashboard");
       }
-    }
-
-    if (response?.ok) {
-      toast.success("Logged in successfully", {
-        description: "You are now logged in",
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+      toast.error("An error occurred", {
+        description: "Please try again later",
         dismissible: true,
       });
-      router.replace("/user/dashboard");
     }
   };
 
@@ -120,7 +129,7 @@ export default function UserAuthForm() {
           </span>
         </div>
       </div>
-      {/*<GoogleSignInButton />*/}
+      {/* <GoogleSignInButton /> */}
     </>
   );
 }

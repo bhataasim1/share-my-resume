@@ -10,15 +10,15 @@ import { ModeToggle } from "../ModeToggle";
 import MobileSidebar from "./sidebar/MobileSidebar";
 import Link from "next/link";
 import DesktopSidebar from "./sidebar/DesktopSidebar";
+import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
-import { useSession } from "next-auth/react";
-import { dashboard, signUp } from "@/constant";
-import { LogIn } from "lucide-react";
+import { LucideLogOut } from "lucide-react";
 
 export const Header = () => {
-  const session = useSession();
-
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = useSession();
+  console.log(session);
+
   return (
     <header className="sticky border-b-[1px] top-0 z-40 w-full bg-white dark:border-b-slate-700 dark:bg-background">
       <NavigationMenu className="mx-auto">
@@ -44,8 +44,15 @@ export const Header = () => {
 
           <div className="hidden md:flex gap-2">
             <ModeToggle />
-            {/* <Button variant="outline">Sign In</Button>
-            <Button variant={"destructive"}>Sign Up</Button> */}
+            {session && (
+              <Button
+                size={"icon"}
+                onClick={() => signOut()}
+                variant="destructive"
+              >
+                <LucideLogOut size={24} />
+              </Button>
+            )}
           </div>
         </NavigationMenuList>
       </NavigationMenu>

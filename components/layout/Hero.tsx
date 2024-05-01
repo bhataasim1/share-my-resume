@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { LogIn, dashboard, signUp } from "@/constant";
+import { dashboard, signUp } from "@/constant";
 import { HeroCards } from "./HeroCard";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { LucideLogIn, LucideUserCheck } from "lucide-react";
 
 export default function Hero() {
   const { data: session } = useSession();
@@ -38,11 +39,13 @@ export default function Hero() {
             </Link>
           ) : (
             <>
-              <Link href={LogIn}>
-                <Button className="w-full md:w-1/3">Sign in</Button>
-              </Link>
+              <Button onClick={() => signIn()} className="w-full md:w-1/3 gap-3">
+                <LucideLogIn size={24} />
+                Sign in
+              </Button>
               <Link href={signUp}>
-                <Button className="w-full md:w-1/3 mt-4" variant="destructive">
+                <Button className="w-full md:w-1/3 mt-4 gap-3" variant="destructive">
+                <LucideUserCheck size={24} />
                   Sign up
                 </Button>
               </Link>

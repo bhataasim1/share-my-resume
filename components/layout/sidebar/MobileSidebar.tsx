@@ -2,7 +2,7 @@
 
 import React, { use } from "react";
 import Link from "next/link";
-import { MenuIcon } from "lucide-react";
+import { LucideLogIn, LucideUserCheck, MenuIcon } from "lucide-react";
 import { navItems } from "@/constant/navItems";
 import {
   Sheet,
@@ -14,8 +14,8 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import Nav from "../Nav";
-import { signOut, useSession } from "next-auth/react";
-import { LogIn, dashboard, signUp } from "@/constant";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { dashboard, signUp } from "@/constant";
 
 export type MobileSidebarProps = {
   isOpen: boolean;
@@ -60,28 +60,30 @@ export default function MobileSidebar({
                           Dashboard
                         </Button>
                       </Link>
-                      <Link href="/">
-                        <Button
-                          variant="default"
-                          className="w-full md:w-auto"
-                          onClick={() => signOut({ callbackUrl: LogIn })}
-                        >
-                          Log Out
-                        </Button>
-                      </Link>
+                      <Button
+                        variant="default"
+                        className="w-full md:w-auto"
+                        onClick={() => signOut()}
+                      >
+                        Log Out
+                      </Button>
                     </>
                   ) : (
                     <>
-                      <Link href={LogIn}>
-                        <Button variant="outline" className="w-full md:w-auto">
-                          Sign In
-                        </Button>
-                      </Link>
+                      <Button
+                        onClick={() => signIn()}
+                        variant="outline"
+                        className="w-full md:w-auto gap-3"
+                      >
+                        <LucideLogIn size={24} />
+                        Sign In
+                      </Button>
                       <Link href={signUp}>
                         <Button
                           variant="destructive"
-                          className="w-full md:w-auto"
+                          className="w-full md:w-auto gap-2"
                         >
+                          <LucideUserCheck size={24} />
                           Sign Up
                         </Button>
                       </Link>
