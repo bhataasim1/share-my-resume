@@ -17,6 +17,7 @@ import { userSignUpValidationSchema } from "./zodValidation";
 import { LogIn } from "@/constant";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { CrudServices } from "./crud/crudServices";
 
 type UserFormValue = z.infer<typeof userSignUpValidationSchema>;
 
@@ -24,6 +25,8 @@ export default function UserSignUpForm() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+
+  const crudServices = new CrudServices();
 
   const defaultValues = {
     name: userDefaultValues.name,
@@ -40,31 +43,14 @@ export default function UserSignUpForm() {
 
   const onSubmit = async (values: UserFormValue) => {
     setLoading(true);
-    try {
-      const response = await fetch("/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: values.name,
-          username: values.username,
-          email: values.email,
-          password: values.password,
-        }),
-      });
-      if (response.ok) {
-        toast.success("User registered successfully");
-        router.push(LogIn);
-      } else {
-        toast.error("Error registering user");
-        console.error("Error registering user:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error registering user:", error);
-    } finally {
-      setLoading(false);
+    const response = await crudServices.register(values);
+    if (response.error) {
+      toast.error(response.error);
+    } else {
+      toast.success("User registered successfully");
+      router.push(LogIn);
     }
+    setLoading(false);
   };
 
   return (
