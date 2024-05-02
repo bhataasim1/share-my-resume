@@ -10,11 +10,11 @@ import { ModeToggle } from "../ModeToggle";
 import MobileSidebar from "./sidebar/MobileSidebar";
 import Link from "next/link";
 import DesktopSidebar from "./sidebar/DesktopSidebar";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
-import { LucideLogOut } from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
+import { UserNav } from "./user-nav";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,21 +45,13 @@ export const Header = () => {
 
           <div className="hidden md:flex gap-2">
             <ModeToggle />
-            {session && (
+            {!session ? (
+              <Button onClick={() => signIn()} variant="default">
+                Sign In
+              </Button>
+            ) : (
               <>
-                <Avatar>
-                  <AvatarImage src="" alt={session.user?.name || "Profile"} />
-                  <AvatarFallback>
-                    {session.user?.name?.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <Button
-                  size={"icon"}
-                  onClick={() => signOut()}
-                  variant="destructive"
-                >
-                  <LucideLogOut size={24} />
-                </Button>
+                <UserNav />
               </>
             )}
           </div>

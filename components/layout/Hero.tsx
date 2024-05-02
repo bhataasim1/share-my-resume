@@ -35,18 +35,17 @@ export default function Hero() {
         <div className="space-y-4 md:space-y-0 md:space-x-4">
           {session ? (
             <Link href={dashboard}>
-              <Button className="w-full md:w-1/3">Dashboard</Button>
+              <Button className="w-full md:w-1/3">Go to Dashboard</Button>
             </Link>
           ) : (
             <>
-              <Button onClick={() => signIn()} className="w-full md:w-1/3 gap-3">
-                <LucideLogIn size={24} />
-                Sign in
-              </Button>
               <Link href={signUp}>
-                <Button className="w-full md:w-1/3 mt-4 gap-3" variant="destructive">
-                <LucideUserCheck size={24} />
-                  Sign up
+                <Button
+                  className="w-full md:w-1/3 mt-4 gap-3"
+                  variant="destructive"
+                >
+                  <LucideUserCheck size={24} />
+                  Sign up Now
                 </Button>
               </Link>
             </>

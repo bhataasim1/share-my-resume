@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { dashboard } from "@/constant";
 import { useEffect } from "react";
-import UserLoginForm from "@/components/form/UserLoginForm";
 import UserSignUpForm from "@/components/form/UserSignUpForm";
 
 export default function SignUpPage() {
@@ -58,7 +57,7 @@ export default function SignUpPage() {
               Fill the details to create your account
             </p>
           </div>
-          
+
           <UserSignUpForm />
 
           <p className="px-8 text-center text-sm text-muted-foreground">
