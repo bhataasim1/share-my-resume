@@ -172,6 +172,9 @@ export default function UserSignUpForm() {
           </span>
         </div>
       </div>
+      <Button variant="outline" className="w-full">
+        SignUp with Google
+      </Button>
     </>
   );
 }

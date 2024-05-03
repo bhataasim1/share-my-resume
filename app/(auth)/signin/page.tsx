@@ -2,11 +2,11 @@
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { dashboard } from "@/constant";
+import { dashboard, signUp } from "@/constant";
 import { useEffect } from "react";
 import UserLoginForm from "@/components/form/UserLoginForm";
 import Image from "next/image";
-import SignInImage from "@/public/undraw_sign_up_n6im.svg";
+import SignInImage from "@/public/undraw_mobile_login_re_9ntv.svg";
 
 export default function LoginPage() {
   const { data: session } = useSession();
@@ -34,7 +34,7 @@ export default function LoginPage() {
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="#" className="underline">
+            <Link href={signUp} className="underline">
               Sign up
             </Link>
           </div>
@@ -45,9 +45,9 @@ export default function LoginPage() {
           <Image
             src={SignInImage}
             alt="Image"
-            className="object-contain" 
+            className="object-contain"
             width={1000}
-            height={1000} 
+            height={1000}
             priority
           />
         </div>

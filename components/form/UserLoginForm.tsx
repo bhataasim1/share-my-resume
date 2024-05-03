@@ -20,8 +20,6 @@ import { FormCombinedInput } from "../common/FormCombinedInput";
 import { userDefaultValues } from "@/constant/defaultValyes";
 import { userSigninValidationSchema } from "./zodValidation";
 
-
-
 type UserFormValue = z.infer<typeof userSigninValidationSchema>;
 
 export default function UserLoginForm() {
@@ -134,6 +132,9 @@ export default function UserLoginForm() {
         </div>
       </div>
       {/* <GoogleSignInButton /> */}
+      <Button variant="outline" className="w-full">
+        Login with Google
+      </Button>
     </>
   );
 }
