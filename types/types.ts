@@ -2,6 +2,7 @@ import { LucideIcon } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 
 export interface NavItem {
+  title?: string;
   href: string;
   disabled?: boolean;
   external?: boolean;

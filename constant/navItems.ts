@@ -1,6 +1,12 @@
 "use client";
 import { NavItem } from "@/types/types";
-import { LucideHome, LucideMail, LucideUsers } from "lucide-react";
+import {
+  LucideBookOpenText,
+  LucideBriefcaseBusiness,
+  LucideHome,
+  LucideUser,
+  LucideUsers,
+} from "lucide-react";
 
 export const navItems: NavItem[] = [
   {
@@ -13,25 +19,32 @@ export const navItems: NavItem[] = [
     icon: LucideUsers,
     href: "/about",
   },
-  // {
-  //   label: "Todos",
-  //   icon: LucideListTodo,
-  //   href: "/admin/dashboard/todos",
-  //   children: [
-  //     {
-  //       label: "Create",
-  //       href: "/admin/dashboard/todos/create",
-  //       children: [
-  //         {
-  //           label: "Basic Details",
-  //           href: "/admin/dashboard/todos/create#basic-details",
-  //         },
-  //         {
-  //           label: "Address Details",
-  //           href: "/admin/dashboard/todos/create#address-details",
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+];
+
+export const dashboardNavItems: NavItem[] = [
+  {
+    label: "Home",
+    icon: LucideHome,
+    href: "/",
+  },
+  {
+    label: "About",
+    icon: LucideUsers,
+    href: "/about",
+  },
+  {
+    label: "Profile",
+    icon: LucideUser,
+    href: "/user/profile",
+  },
+  {
+    label: "Education",
+    icon: LucideBookOpenText,
+    href: "/user/education",
+  },
+  {
+    label: "Experience",
+    icon: LucideBriefcaseBusiness,
+    href: "/user/expreience",
+  },
 ];

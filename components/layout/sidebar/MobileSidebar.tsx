@@ -1,9 +1,7 @@
-"use client";
-
 import React, { use } from "react";
 import Link from "next/link";
 import { LucideLogIn, LucideUserCheck, MenuIcon } from "lucide-react";
-import { navItems } from "@/constant/navItems";
+import { dashboardNavItems, navItems } from "@/constant/navItems";
 import {
   Sheet,
   SheetContent,
@@ -15,7 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import Nav from "../Nav";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { dashboard, signUp } from "@/constant";
+import { signUp } from "@/constant";
 
 export type MobileSidebarProps = {
   isOpen: boolean;
@@ -51,15 +49,12 @@ export default function MobileSidebar({
                 Navigation
               </h2> */}
               <div className="space-y-1">
-                <Nav items={navItems} setOpen={setIsOpen} />
+                {/* <Nav items={navItems} setOpen={setIsOpen} /> */}
                 <div className="flex flex-col gap-2 justify-center md:flex-row md:justify-between">
                   {session ? (
                     <>
-                      <Link href={dashboard}>
-                        <Button variant="default" className="w-full md:w-auto">
-                          Dashboard
-                        </Button>
-                      </Link>
+                      <Nav items={dashboardNavItems} setOpen={setIsOpen} />
+
                       <Button
                         variant="default"
                         className="w-full md:w-auto"
@@ -70,6 +65,7 @@ export default function MobileSidebar({
                     </>
                   ) : (
                     <>
+                      <Nav items={navItems} setOpen={setIsOpen} />
                       <Button
                         onClick={() => signIn()}
                         variant="outline"

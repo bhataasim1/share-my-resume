@@ -12,8 +12,6 @@ import Link from "next/link";
 import DesktopSidebar from "./sidebar/DesktopSidebar";
 import { signIn, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-import { AvatarImage } from "@radix-ui/react-avatar";
 import { UserNav } from "./user-nav";
 
 export const Header = () => {
