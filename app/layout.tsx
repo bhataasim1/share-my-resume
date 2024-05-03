@@ -5,6 +5,7 @@ import Providers from "@/components/Provider";
 import { Header } from "@/components/layout/Header";
 import { getServerSession } from "next-auth";
 import { Toaster } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,9 +25,14 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body className={`${inter.className} overflow-hidden`}>
         <Providers session={session}>
-          <Toaster richColors={true} position={"top-right"} closeButton={true}/>
+          <Toaster
+            richColors={true}
+            position={"top-right"}
+            closeButton={true}
+          />
           <Header />
           {children}
+          <ScrollArea />
         </Providers>
       </body>
     </html>

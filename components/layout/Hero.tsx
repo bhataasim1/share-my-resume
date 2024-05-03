@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { dashboard, signUp } from "@/constant";
 import { HeroCards } from "./HeroCard";
-import { signIn, useSession } from "next-auth/react";
-import { LucideLogIn, LucideUserCheck } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { LucideUserCheck } from "lucide-react";
 
 export default function Hero() {
   const { data: session } = useSession();
