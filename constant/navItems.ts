@@ -1,11 +1,6 @@
 "use client";
 import { NavItem } from "@/types/types";
-import { sign } from "crypto";
-import {
-  LucideHome,
-  LucideMail,
-  LucideUsers,
-} from "lucide-react";
+import { LucideHome, LucideMail, LucideUsers } from "lucide-react";
 
 export const navItems: NavItem[] = [
   {
@@ -18,12 +13,7 @@ export const navItems: NavItem[] = [
     icon: LucideUsers,
     href: "/about",
   },
-  {
-    label: "Contact",
-    icon: LucideMail,
-    href: "/contact",
-  },
-    // {
+  // {
   //   label: "Todos",
   //   icon: LucideListTodo,
   //   href: "/admin/dashboard/todos",
