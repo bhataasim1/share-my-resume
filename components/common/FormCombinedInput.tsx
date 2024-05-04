@@ -41,7 +41,6 @@ export const FormCombinedInput = React.forwardRef<
     const inputElement = isTextarea ? (
       // @ts-ignore
       <Textarea
-        data-testId={dataTestId}
         rows={rows}
         disabled={disabled}
         className={cn(

@@ -1,6 +1,6 @@
-export const LogIn = "/signin";
-export const signUp = "/signup";
-export const dashboard = "/user/dashboard";
-export const userEducation = "/user/education";
-export const userExperience = "/user/expreience";
-export const userResume = "/user/resume";
+export const LOGIN = "/signin";
+export const SIGNUP = "/signup";
+export const USER_DASHBOARD = "/user/dashboard";
+export const USER_EDUCATION = "/user/education";
+export const USER_EXPERIENCE = "/user/expreience";
+export const USER_RESUME = "/user/resume";

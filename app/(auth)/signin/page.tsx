@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { dashboard, signUp } from "@/constant";
+import { USER_DASHBOARD, SIGNUP } from "@/constant";
 import { useEffect } from "react";
 import UserLoginForm from "@/components/form/UserLoginForm";
 import Image from "next/image";
@@ -15,7 +15,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (session) {
-      router.push(dashboard);
+      router.push(USER_DASHBOARD);
     }
   }, [session, router]);
 
@@ -34,7 +34,7 @@ export default function LoginPage() {
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href={signUp} className="underline">
+            <Link href={SIGNUP} className="underline">
               Sign up
             </Link>
           </div>

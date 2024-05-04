@@ -13,7 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import Nav from "../Nav";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { signUp } from "@/constant";
+import { SIGNUP } from "@/constant";
 
 export type MobileSidebarProps = {
   isOpen: boolean;
@@ -74,7 +74,7 @@ export default function MobileSidebar({
                         <LucideLogIn size={24} />
                         Sign In
                       </Button>
-                      <Link href={signUp}>
+                      <Link href={SIGNUP}>
                         <Button
                           variant="destructive"
                           className="w-full md:w-auto gap-2"

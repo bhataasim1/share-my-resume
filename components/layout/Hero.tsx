@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { dashboard, signUp } from "@/constant";
+import { USER_DASHBOARD, SIGNUP } from "@/constant";
 import { HeroCards } from "./HeroCard";
 import { useSession } from "next-auth/react";
 import { LucideUserCheck } from "lucide-react";
@@ -34,12 +34,12 @@ export default function Hero() {
 
         <div className="space-y-4 md:space-y-0 md:space-x-4">
           {session ? (
-            <Link href={dashboard}>
+            <Link href={USER_DASHBOARD}>
               <Button className="w-full md:w-1/3">Go to Dashboard</Button>
             </Link>
           ) : (
             <>
-              <Link href={signUp}>
+              <Link href={SIGNUP}>
                 <Button
                   className="w-full md:w-1/3 mt-4 gap-3"
                   variant="destructive"

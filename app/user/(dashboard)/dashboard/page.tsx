@@ -1,7 +1,3 @@
-"use client";
-// import { CalendarDateRangePicker } from "@/components/date-range-picker";
-// import { Overview } from "@/components/overview";
-// import { RecentSales } from "@/components/recent-sales";
 import {
   Card,
   CardContent,
@@ -10,9 +6,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button"; 
+import { Button } from "@/components/ui/button";
 
-export default function page() {
+export default function Page() {
   return (
     <>
       <div className="flex-1 p-2 px-4">
@@ -141,9 +137,7 @@ export default function page() {
                 <CardHeader>
                   <CardTitle>Overview</CardTitle>
                 </CardHeader>
-                <CardContent className="pl-2">
-                  {/* <Overview /> */}
-                </CardContent>
+                <CardContent className="pl-2">{/* <Overview /> */}</CardContent>
               </Card>
               <Card className="col-span-4 md:col-span-3">
                 <CardHeader>
@@ -152,9 +146,7 @@ export default function page() {
                     You made 265 sales this month.
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  {/* <RecentSales /> */}
-                </CardContent>
+                <CardContent>{/* <RecentSales /> */}</CardContent>
               </Card>
             </div>
           </TabsContent>

@@ -11,10 +11,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  dashboard,
-  userEducation,
-  userExperience,
-  userResume,
+  USER_DASHBOARD,
+  USER_EDUCATION,
+  USER_EXPERIENCE,
+  USER_RESUME,
 } from "@/constant";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -52,16 +52,16 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => handleRoute(dashboard)}>
+          <DropdownMenuItem onClick={() => handleRoute(USER_DASHBOARD)}>
             Dashboard
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleRoute(userEducation)}>
+          <DropdownMenuItem onClick={() => handleRoute(USER_EDUCATION)}>
             Education
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleRoute(userExperience)}>
+          <DropdownMenuItem onClick={() => handleRoute(USER_EXPERIENCE)}>
             Experience
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleRoute(userResume)}>
+          <DropdownMenuItem onClick={() => handleRoute(USER_RESUME)}>
             Resume
           </DropdownMenuItem>
         </DropdownMenuGroup>

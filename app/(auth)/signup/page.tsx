@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { dashboard } from "@/constant";
+import { USER_DASHBOARD } from "@/constant";
 import { useEffect } from "react";
 import UserSignUpForm from "@/components/form/UserSignUpForm";
 import Image from "next/image";
@@ -15,7 +15,7 @@ export default function SignUpPage() {
 
   useEffect(() => {
     if (session) {
-      router.push(dashboard);
+      router.push(USER_DASHBOARD);
     }
   }, [session, router]);
 

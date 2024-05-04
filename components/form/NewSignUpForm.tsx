@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userSignUpValidationSchema } from "./zodValidation";
 import * as z from "zod";
 import { toast } from "sonner";
-import { LogIn } from "@/constant";
+import { LOGIN } from "@/constant";
 import {
   Form,
   FormControl,
@@ -58,7 +58,7 @@ export function UserSignUpForm() {
       toast.error(response.error);
     } else {
       toast.success("User registered successfully");
-      router.push(LogIn);
+      router.push(LOGIN);
     }
     setLoading(false);
   };
@@ -186,7 +186,7 @@ export function UserSignUpForm() {
               </div>
               <div className="mt-4 text-center text-sm">
                 Already have an account?{" "}
-                <Link href={LogIn} className="underline">
+                <Link href={LOGIN} className="underline">
                   Sign in
                 </Link>
               </div>

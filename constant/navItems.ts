@@ -1,11 +1,12 @@
 "use client";
 import { NavItem } from "@/types/types";
 import {
-  LucideBookOpenText,
+  LucideBadgeInfo,
   LucideBriefcaseBusiness,
+  LucideGraduationCap,
   LucideHome,
+  LucidePanelBottom,
   LucideUser,
-  LucideUsers,
 } from "lucide-react";
 
 export const navItems: NavItem[] = [
@@ -16,21 +17,16 @@ export const navItems: NavItem[] = [
   },
   {
     label: "About",
-    icon: LucideUsers,
+    icon: LucideBadgeInfo,
     href: "/about",
   },
 ];
 
 export const dashboardNavItems: NavItem[] = [
   {
-    label: "Home",
-    icon: LucideHome,
-    href: "/",
-  },
-  {
-    label: "About",
-    icon: LucideUsers,
-    href: "/about",
+    label: "Dashboard",
+    icon: LucidePanelBottom,
+    href: "/user/dashboard",
   },
   {
     label: "Profile",
@@ -39,12 +35,12 @@ export const dashboardNavItems: NavItem[] = [
   },
   {
     label: "Education",
-    icon: LucideBookOpenText,
+    icon: LucideGraduationCap,
     href: "/user/education",
   },
   {
     label: "Experience",
     icon: LucideBriefcaseBusiness,
-    href: "/user/expreience",
+    href: "/user/experience",
   },
 ];

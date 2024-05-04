@@ -4,7 +4,15 @@ import Image from "next/image";
 export const HeroCards = () => {
   return (
     <>
-      <Image src={HeroResumeSVG} alt="Hero Resume" priority />
+      <Image
+        src={HeroResumeSVG}
+        alt="Hero Resume"
+        style={{
+          width: "auto",
+          height: "auto",
+        }}
+        priority
+      />
     </>
   );
 };

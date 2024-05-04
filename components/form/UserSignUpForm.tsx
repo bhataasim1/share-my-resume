@@ -14,7 +14,7 @@ import { use, useState } from "react";
 import { Button } from "../ui/button";
 import { userDefaultValues } from "@/constant/defaultValyes";
 import { userSignUpValidationSchema } from "./zodValidation";
-import { LogIn } from "@/constant";
+import { LOGIN } from "@/constant";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { CrudServices } from "./crud/crudServices";
@@ -48,7 +48,7 @@ export default function UserSignUpForm() {
       toast.error(response.error);
     } else {
       toast.success("User registered successfully");
-      router.push(LogIn);
+      router.push(LOGIN);
     }
     setLoading(false);
   };
