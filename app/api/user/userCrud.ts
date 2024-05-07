@@ -6,6 +6,7 @@ import { mkdir, writeFile } from "fs/promises";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
+import { getSignedURL } from "./awsActions";
 
 export async function getUserProfile(req: NextRequest, res: NextResponse) {
   try {
@@ -103,7 +104,6 @@ export async function updateUserProfileImage(file: ArrayBuffer) {
 
   try {
     const session = await getServerSession(authOptions);
-    // console.log("Session server checking", session);
 
     if (!session) {
       return { error: "You are Not authorized to access this." };
@@ -124,23 +124,36 @@ export async function updateUserProfileImage(file: ArrayBuffer) {
     }
 
     const filename = `${Date.now()}-${session.user?.name}-avatar.jpg`;
-    const imagesDir = path.join(process.cwd(), "public", "images");
-    const filePath = path.join(imagesDir, filename);
 
-    await mkdir(imagesDir, { recursive: true });
+    const signedUrlResult = await getSignedURL(filename);
+    // console.log("SignedUrlResult", signedUrlResult);
 
-    await writeFile(filePath, Buffer.from(file));
+    //@ts-ignore
+    const img = await fetch(signedUrlResult.url, {
+      method: "PUT",
+      body: file,
+      headers: {
+        "Content-Type": "image/jpeg",
+      },
+    });
 
-    const relativeFilePath = path.join("/images", filename); // this is just for now for locally storing the image
+    if (!img.ok) {
+      return { error: "Error uploading image" };
+    }
 
-    // console.log("Image saved in server:", relativeFilePath);
+    //@ts-ignore
+    const imageUrl = signedUrlResult.url.split("?")[0];
+    // console.log("Image URL", imageUrl);
 
+    if (!imageUrl) {
+      return { error: "Error uploading image" };
+    }
     const user = prisma.userDetail.update({
       where: {
         id: userDetail.id,
       },
       data: {
-        avatar: relativeFilePath,
+        avatar: imageUrl,
       },
       select: {
         id: true,

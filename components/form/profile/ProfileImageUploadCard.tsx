@@ -20,14 +20,16 @@ import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { CrudServices } from "../crud/crudServices";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type UserFormValue = z.infer<typeof userUpdateImageValidationSchema>;
 
 const ProfileImageUploadCard = () => {
   const crudServices = new CrudServices();
   const { data: session } = useSession();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [image, setImage] = useState<String>();
+  const [uploading, setUploading] = useState<boolean>(false);
 
   const form = useForm<UserFormValue>({
     resolver: zodResolver(userUpdateImageValidationSchema),
@@ -38,7 +40,7 @@ const ProfileImageUploadCard = () => {
 
   useEffect(() => {
     fetchUserProfile();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function fetchUserProfile() {
@@ -59,7 +61,7 @@ const ProfileImageUploadCard = () => {
   }
 
   const onSubmit = async (formData: FormData) => {
-    setLoading(true);
+    setUploading(true);
     try {
       const response = await crudServices.updateUserAvatar(formData);
       if (response?.error) {
@@ -67,12 +69,13 @@ const ProfileImageUploadCard = () => {
         toast.error("Error updating image");
       } else {
         // console.log(response);
+        setImage(response.data.avatar);
         toast.success("Image Uploaded Successfully");
       }
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
+      setUploading(false);
     }
   };
 
@@ -80,14 +83,18 @@ const ProfileImageUploadCard = () => {
     <Card className="overflow-hidden">
       <CardContent>
         <div className="grid gap-2 mt-2">
-          <Image
-            alt={session?.user?.name || "User Profile Image"}
-            className="aspect-square w-full rounded-md object-cover"
-            src={image || myImage}
-            height={200}
-            width={200}
-            priority
-          />
+          {loading ? (
+            <Skeleton className="aspect-square w-full rounded-md bg-slate-400" />
+          ) : (
+            <Image
+              alt={session?.user?.name || "User Profile Image"}
+              className="aspect-square w-full rounded-md object-cover"
+              src={image || myImage}
+              height={200}
+              width={200}
+              priority
+            />
+          )}
           <div className="grid">
             <Form {...form}>
               <form action={onSubmit} className="flex">
@@ -109,15 +116,13 @@ const ProfileImageUploadCard = () => {
                     </FormItem>
                   )}
                 />
-                {loading ? (
-                  <Button className="w-full" disabled>
-                    Loading...
-                  </Button>
-                ) : (
-                  <Button className="w-full" type="submit">
-                    Upload Avatar
-                  </Button>
-                )}
+                <Button
+                  className="col-span-1"
+                  type="submit"
+                  disabled={uploading}
+                >
+                  {uploading ? "Uploading..." : "Upload Avatar"}
+                </Button>
               </form>
             </Form>
           </div>

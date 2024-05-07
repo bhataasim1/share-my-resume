@@ -70,6 +70,11 @@ export class CrudServices {
         return { error: "No file found" };
       }
 
+      // 500KB
+      if (avatarFile.size > 500000) {
+        return { error: "File size is too large" };
+      }
+
       const fileReader = new FileReader();
       const fileContentPromise = new Promise<ArrayBuffer>((resolve, reject) => {
         fileReader.onload = () => {
