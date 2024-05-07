@@ -3,6 +3,7 @@
 import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import DashboardLeftSidebarNav from "@/components/layout/DashboardLeftSidebarNav";
+import { Toaster } from "sonner";
 
 const breadcrumbProps = {
   homeElement: "Dashboard",

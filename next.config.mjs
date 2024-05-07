@@ -3,7 +3,10 @@ const nextConfig = {
     reactStrictMode: true,
     webpack5: true,
     images: {
-        domains: ['127.0.0.1', 'res.cloudinary.com'],
+        domains: [
+            '127.0.0.1',
+            "share-your-resume.s3.ap-southeast-2.amazonaws.com"
+        ],
     },
     async headers() {
         return [
