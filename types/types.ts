@@ -37,3 +37,29 @@ export type UserRegisterType = {
   password: string;
   username: string;
 };
+
+export type userUpdateProfileType = {
+  bio: string;
+  skills: string[];
+};
+
+export type userImageUploadType = {
+  avatar: string;
+};
+
+export type UserResposneType = {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  UserDetail: {
+    avatar: string | null;
+    bio: string | null;
+    skills: string[];
+  };
+};
+
+export type SkillType = {
+  label: string;
+  value: string;
+}[];

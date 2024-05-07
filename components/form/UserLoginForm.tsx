@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import { FormCombinedInput } from "../common/FormCombinedInput";
 import { userDefaultValues } from "@/constant/defaultValyes";
 import { userSigninValidationSchema } from "./zodValidation";
+import { USER_DASHBOARD } from "@/constant";
 
 type UserFormValue = z.infer<typeof userSigninValidationSchema>;
 
@@ -42,7 +43,7 @@ export default function UserLoginForm() {
       const response = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        callbackUrl: callbackUrl ?? "/user/dashboard",
+        callbackUrl: callbackUrl ?? USER_DASHBOARD,
         redirect: false,
       });
       if (response?.error) {
@@ -59,7 +60,7 @@ export default function UserLoginForm() {
           description: "You are now logged in",
           dismissible: true,
         });
-        router.replace("/user/dashboard");
+        router.replace(USER_DASHBOARD);
       }
     } catch (error) {
       console.error(error);

@@ -23,3 +23,19 @@ export const userSigninValidationSchema = z.object({
   email: z.string().email({ message: "Enter a valid email address" }),
   password: z.string().min(2, { message: "Password must be at least 2 chars" }),
 });
+
+export const userUpdateValidationSchema = z.object({
+  bio: z
+    .string()
+    .min(20, { message: "Bio should be minimum of 20 Characters" })
+    .optional(),
+  skills: z
+    .array(z.string())
+    .max(10, { message: "Select at most two skills" })
+    .nonempty({ message: "Select at least one skill" })
+    .optional(),
+});
+
+export const userUpdateImageValidationSchema = z.object({
+  avatar: z.string(),
+});
