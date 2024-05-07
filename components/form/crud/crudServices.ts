@@ -1,10 +1,12 @@
 export class CrudServices {
   baseUrl: string;
   registerEndpoint: string;
+  updateUserDetailsEndpoint: string;
 
   constructor() {
     this.baseUrl = "/api";
     this.registerEndpoint = "/register";
+    this.updateUserDetailsEndpoint = "/user/profile"; // rename the endpoint later to userEndpoint
   }
 
   async register(data: any) {
@@ -32,34 +34,18 @@ export class CrudServices {
     }
   }
 
-  async read(path: string) {
+  async updateUserDetails(data: any) {
     try {
-      const response = await fetch(`${this.baseUrl}/${path}`);
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.error("Error reading data:", response.statusText);
-        return {
-          error: "Error reading data",
-        };
-      }
-    } catch (error) {
-      console.error("Error reading data:", error);
-      return {
-        error: "Error reading data",
-      };
-    }
-  }
-
-  async update(data: any, path: string) {
-    try {
-      const response = await fetch(`${this.baseUrl}/${path}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `${this.baseUrl}/${this.updateUserDetailsEndpoint}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
       if (response.ok) {
         return response.json();
       } else {
@@ -76,23 +62,73 @@ export class CrudServices {
     }
   }
 
-  async delete(path: string) {
+  async updateUserAvatar(formData: FormData) {
     try {
-      const response = await fetch(`${this.baseUrl}/${path}`, {
-        method: "DELETE",
+      const avatarFile = formData.get("avatar") as File;
+
+      if (!avatarFile || avatarFile.size === 0) {
+        return { error: "No file found" };
+      }
+
+      const fileReader = new FileReader();
+      const fileContentPromise = new Promise<ArrayBuffer>((resolve, reject) => {
+        fileReader.onload = () => {
+          resolve(fileReader.result as ArrayBuffer);
+        };
+        fileReader.onerror = reject;
+        fileReader.readAsArrayBuffer(avatarFile);
       });
+
+      const fileContent = await fileContentPromise;
+      console.log("File Content = ", fileContent);
+
+      const response = await fetch(
+        `${this.baseUrl}/${this.updateUserDetailsEndpoint}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       if (response.ok) {
         return response.json();
       } else {
-        console.error("Error deleting data:", response.statusText);
+        console.error("Error updating image:", response.statusText);
         return {
-          error: "Error deleting data",
+          error: "Error updating image",
         };
       }
     } catch (error) {
-      console.error("Error deleting data:", error);
+      console.error("Error updating image:", error);
       return {
-        error: "Error deleting data",
+        error: "Error updating image",
+      };
+    }
+  }
+
+  async getUserProfile() {
+    try {
+      const res = await fetch(
+        `${this.baseUrl}/${this.updateUserDetailsEndpoint}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (res.ok) {
+        return res.json();
+      } else {
+        console.error("Error fetching user profile:", res.statusText);
+        return {
+          error: "Error fetching user profile",
+        };
+      }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      return {
+        error: "Error fetching user profile",
       };
     }
   }

@@ -44,6 +44,12 @@ export async function registerUser(userData: UserRegisterType) {
       },
     });
 
+    await prisma.userDetail.create({
+      data: {
+        userId: newUser.id,
+      },
+    });
+
     return newUser;
   } catch (error) {
     console.error("Error creating user:", error);
