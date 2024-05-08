@@ -2,27 +2,72 @@ import { userUpdateValidationSchema } from "@/components/form/zodValidation";
 import { authOptions } from "@/lib/authOptions";
 import prisma from "@/prisma/schema";
 import { userUpdateProfileType } from "@/types/types";
-import { mkdir, writeFile } from "fs/promises";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
 import { getSignedURL } from "./awsActions";
 
-export async function getUserProfile(req: NextRequest, res: NextResponse) {
-  try {
-    const session = await getServerSession(authOptions);
+export class UserProfileService {
+  private async getSession() {
+    return await getServerSession(authOptions);
+  }
 
-    if (!session) {
-      return NextResponse.json(
-        { message: "You are Not authorized to access this." },
-        { status: 401 }
-      );
+  public async getUserProfile(req: NextRequest, res: NextResponse) {
+    try {
+      const session = await this.getSession();
+
+      if (!session) {
+        return NextResponse.json(
+          { message: "You are not authorized to access this." },
+          { status: 401 }
+        );
+      }
+
+      const user = await this.findUserById(session.user?.id);
+
+      return user;
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      return error;
+    }
+  }
+
+  public async updateUserProfile(data: userUpdateProfileType) {
+    const { bio, skills } = data;
+    const validationResult = userUpdateValidationSchema.safeParse(data);
+
+    if (!validationResult.success) {
+      return { error: validationResult.error.errors[0] };
     }
 
-    const user = await prisma.user.findFirst({
-      where: {
-        id: session.user?.id,
-      },
+    try {
+      const session = await this.getSession();
+
+      if (!session) {
+        return { error: "You are not authorized to access this." };
+      }
+
+      const userDetail = await this.findUserDetailByUserId(session.user?.id);
+
+      if (!userDetail) {
+        throw new Error("UserDetail not found.");
+      }
+
+      const updatedUser = await this.updateUserDetail(
+        userDetail.id,
+        bio,
+        skills
+      );
+
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      return error;
+    }
+  }
+
+  private async findUserById(userId: string | undefined) {
+    return await prisma.user.findFirst({
+      where: { id: userId },
       select: {
         id: true,
         name: true,
@@ -37,123 +82,98 @@ export async function getUserProfile(req: NextRequest, res: NextResponse) {
         },
       },
     });
-
-    return user;
-  } catch (error) {
-    return error;
-  }
-}
-
-export async function updateUserProfile(data: userUpdateProfileType) {
-  const { bio, skills } = data;
-
-  const validationResult = userUpdateValidationSchema.safeParse(data);
-
-  if (!validationResult.success) {
-    return { error: validationResult.error.errors[0] };
   }
 
-  try {
-    const session = await getServerSession(authOptions);
+  private async findUserDetailByUserId(userId: string | undefined) {
+    return await prisma.userDetail.findFirst({
+      where: { userId },
+    });
+  }
 
-    if (!session) {
-      return { error: "You are Not authorized to access this." };
-    }
-
-    const userDetail = await prisma.userDetail.findFirst({
-      where: {
-        userId: session.user?.id,
-      },
+  private async updateUserDetail(id: string, bio?: string, skills?: string[]) {
+    const existingUserDetail = await prisma.userDetail.findUnique({
+      where: { id },
     });
 
-    if (!userDetail) {
+    if (!existingUserDetail) {
       throw new Error("UserDetail not found.");
     }
+    const updatedBio = bio !== undefined ? bio : existingUserDetail.bio;
+    const updatedSkills =
+      skills !== undefined ? skills : existingUserDetail.skills;
 
-    const user = prisma.userDetail.update({
-      where: {
-        id: userDetail.id,
-      },
+    const updatedUser = await prisma.userDetail.update({
+      where: { id },
       data: {
-        bio: bio || userDetail.bio,
-        skills: {
-          set: skills || userDetail.skills,
+        bio: updatedBio,
+        skills: { set: updatedSkills },
+      },
+      select: {
+        id: true,
+        avatar: true,
+        bio: true,
+        skills: true,
+      },
+    });
+
+    return updatedUser;
+  }
+
+  public async updateUserProfileImage(file: ArrayBuffer) {
+    if (!file) {
+      return { error: "Please upload a valid image." };
+    }
+
+    try {
+      const session = await this.getSession();
+
+      if (!session) {
+        return { error: "You are not authorized to access this." };
+      }
+
+      const userDetail = await this.findUserDetailByUserId(session.user?.id);
+
+      if (!userDetail) {
+        throw new Error("User not found.");
+      }
+
+      const filename = `${Date.now()}-${session.user?.name}-avatar.jpg`;
+      const signedUrlResult = await getSignedURL(filename);
+
+      //@ts-ignore
+      const response = await fetch(signedUrlResult.url, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": "image/jpeg",
         },
-      },
-      select: {
-        id: true,
-        avatar: true,
-        bio: true,
-        skills: true,
-      },
-    });
+      });
 
-    return user;
-  } catch (error) {
-    console.log("error", error);
-    return error;
+      if (!response.ok) {
+        return { error: "Error uploading image." };
+      }
+
+      //@ts-ignore
+      const imageUrl = signedUrlResult.url.split("?")[0];
+
+      if (!imageUrl) {
+        return { error: "Error getting image URL." };
+      }
+
+      const updatedUser = await this.updateUserAvatar(userDetail.id, imageUrl);
+
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating user profile image:", error);
+      return error;
+    }
   }
-}
 
-export async function updateUserProfileImage(file: ArrayBuffer) {
-  // console.log("Crud server ", file);
-
-  if (!file) {
-    return { error: "Please upload a Valid Image" };
-  }
-
-  try {
-    const session = await getServerSession(authOptions);
-
-    if (!session) {
-      return { error: "You are Not authorized to access this." };
-    }
-
-    const userDetail = await prisma.userDetail.findFirst({
-      where: {
-        userId: session.user?.id,
-      },
-      select: {
-        id: true,
-        userId: true,
-      },
-    });
-
-    if (!userDetail) {
-      throw new Error("User not found.");
-    }
-
-    const filename = `${Date.now()}-${session.user?.name}-avatar.jpg`;
-
-    const signedUrlResult = await getSignedURL(filename);
-    // console.log("SignedUrlResult", signedUrlResult);
-
-    //@ts-ignore
-    const img = await fetch(signedUrlResult.url, {
-      method: "PUT",
-      body: file,
-      headers: {
-        "Content-Type": "image/jpeg",
-      },
-    });
-
-    if (!img.ok) {
-      return { error: "Error uploading image" };
-    }
-
-    //@ts-ignore
-    const imageUrl = signedUrlResult.url.split("?")[0];
-    // console.log("Image URL", imageUrl);
-
-    if (!imageUrl) {
-      return { error: "Error uploading image" };
-    }
-    const user = prisma.userDetail.update({
-      where: {
-        id: userDetail.id,
-      },
+  private async updateUserAvatar(id: string, avatarUrl: string) {
+    const updatedUser = await prisma.userDetail.update({
+      where: { id },
       data: {
-        avatar: imageUrl,
+        avatar: avatarUrl,
       },
       select: {
         id: true,
@@ -163,9 +183,6 @@ export async function updateUserProfileImage(file: ArrayBuffer) {
       },
     });
 
-    return user;
-  } catch (error) {
-    console.log("error", error);
-    return error;
+    return updatedUser;
   }
 }
