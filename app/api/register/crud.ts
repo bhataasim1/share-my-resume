@@ -3,38 +3,71 @@ import prisma from "@/prisma/schema";
 import { UserRegisterType } from "@/types/types";
 import { hash } from "bcryptjs";
 
-export async function registerUser(userData: UserRegisterType) {
-  const { username, name, email, password } = userData;
-
-  const validationResult = userRegisterSchema.safeParse(userData);
-
-  if (!validationResult.success) {
-    return { error: validationResult.error.errors[0] };
-  }
-
-  try {
+export class UserRegistrationService {
+  protected async checkExistingUser(email: string, username: string) {
     const existingUser = await prisma.user.findFirst({
       where: {
-        OR: [{ email: email }, { username: username }],
+        OR: [{ email }, { username }],
       },
     });
 
-    if (existingUser?.email === email) {
-      return { error: "User with this email already exists" };
+    return existingUser;
+  }
+
+  protected async hashPassword(password: string) {
+    return hash(password, 10);
+  }
+
+  public async registerUser(userData: UserRegisterType) {
+    const { username, name, email, password } = userData;
+
+    const validationResult = userRegisterSchema.safeParse(userData);
+
+    if (!validationResult.success) {
+      return { error: validationResult.error.errors[0] };
     }
 
-    if (existingUser?.username === username) {
-      return { error: "User with this username already exists" };
+    try {
+      const existingUser = await this.checkExistingUser(email, username);
+
+      if (existingUser?.email === email) {
+        return { error: "User with this email already exists" };
+      }
+
+      if (existingUser?.username === username) {
+        return { error: "User with this username already exists" };
+      }
+
+      const hashedPassword = await this.hashPassword(password);
+
+      const newUser = await this.createUser(
+        username,
+        name,
+        email,
+        hashedPassword
+      );
+
+      await this.createUserDetail(newUser.id);
+
+      return newUser;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      return { error: "Something went wrong" };
     }
+  }
 
-    const hashedPassword = await hash(password, 10);
-
+  private async createUser(
+    username: string,
+    name: string,
+    email: string,
+    password: string
+  ) {
     const newUser = await prisma.user.create({
       data: {
         username,
         name,
         email,
-        password: hashedPassword,
+        password,
       },
       select: {
         id: true,
@@ -44,15 +77,14 @@ export async function registerUser(userData: UserRegisterType) {
       },
     });
 
+    return newUser;
+  }
+
+  private async createUserDetail(userId: string) {
     await prisma.userDetail.create({
       data: {
-        userId: newUser.id,
+        userId,
       },
     });
-
-    return newUser;
-  } catch (error) {
-    console.error("Error creating user:", error);
-    return { error: "Something went wrong" };
   }
 }

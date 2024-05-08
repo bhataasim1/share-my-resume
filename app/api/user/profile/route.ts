@@ -1,19 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getUserProfile,
-  updateUserProfile,
-  updateUserProfileImage,
-} from "../userCrud";
+import { UserProfileService } from "../userCrud";
 import { userUpdateProfileType } from "@/types/types";
+
+const userProfileService = new UserProfileService();
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
-    const user = await getUserProfile(req, res);
+    const user = await userProfileService.getUserProfile(req, res);
     return NextResponse.json(user);
   } catch (error) {
-    console.log("error", error);
+    console.error("Error handling GET request:", error);
     return NextResponse.json(
-      { message: "Something went Wrong" },
+      { message: "Something went wrong" },
       { status: 500 }
     );
   }
@@ -22,12 +20,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
 export async function PUT(req: NextRequest, res: NextResponse) {
   try {
     const data: userUpdateProfileType = await req.json();
-    const user = await updateUserProfile(data);
+    const user = await userProfileService.updateUserProfile(data);
     return NextResponse.json(user);
   } catch (error) {
-    console.log("error", error);
+    console.error("Error handling PUT request:", error);
     return NextResponse.json(
-      { message: "Something went Wrong" },
+      { message: "Something went wrong" },
       { status: 500 }
     );
   }
@@ -40,28 +38,25 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   try {
     const formData = await req.formData();
-
-    // const avatar = formData.get("avatar") as Blob;
     const avatarFile = formData.get("avatar") as File;
 
     if (!avatarFile) {
-      return NextResponse.json({ error: "No file Found" }, { status: 400 });
+      return NextResponse.json({ error: "No file found" }, { status: 400 });
     }
-    // console.log("avatar", avatarFile);
 
     const fileContent = await avatarFile.arrayBuffer();
-    const imgResponse = await updateUserProfileImage(fileContent);
-
-    // const imgResponse = await updateUserProfileImage(avatar);
+    const imgResponse = await userProfileService.updateUserProfileImage(
+      fileContent
+    );
 
     return NextResponse.json(
-      { data: imgResponse, message: "File Uploaded" },
+      { data: imgResponse, message: "File uploaded" },
       { status: 200 }
     );
   } catch (error) {
-    console.log("error", error);
+    console.error("Error handling POST request:", error);
     return NextResponse.json(
-      { message: "Something went Wrong" },
+      { message: "Something went wrong" },
       { status: 500 }
     );
   }

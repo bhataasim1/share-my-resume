@@ -1,67 +1,52 @@
 "use client";
 
-import { FormCombinedInput } from "@/components/common/FormCombinedInput";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { Form, FormField, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormCombinedInput } from "@/components/common/FormCombinedInput";
 import { FormSelectInput } from "@/components/common/FormSelectInput";
 import { Button } from "@/components/ui/button";
 import { CrudServices } from "../crud/crudServices";
-import { toast } from "sonner";
 import { userUpdateValidationSchema } from "../zodValidation";
 import { skills } from "@/constant/skills";
 import ProfileImageUploadCard from "./ProfileImageUploadCard";
 import * as z from "zod";
+// import { UserResponseType } from "@/types/types";
 import { UserResposneType } from "@/types/types";
 
 type UserFormValue = z.infer<typeof userUpdateValidationSchema>;
 
-export default function ProfileUpdateForm() {
+const ProfileUpdateForm = () => {
   const [loading, setLoading] = useState(false);
-  const crudServices = new CrudServices();
   const [user, setUser] = useState<UserResposneType | null>(null);
-
-  // console.log("user resposnse", user?.UserDetail[0].bio);
+  const form = useForm<UserFormValue>({
+    resolver: zodResolver(userUpdateValidationSchema),
+  });
+  const crudServices = new CrudServices();
 
   useEffect(() => {
     fetchUserProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function fetchUserProfile() {
+  const fetchUserProfile = async () => {
     setLoading(true);
     try {
       const res = await crudServices.getUserProfile();
-      if (!res) {
-        toast.error("Try Refreshing Again");
+      // console.log("res", res.data);
+      if (!res || res.error) {
+        toast.error("Error fetching user profile");
+      } else {
+        setUser(res.data);
       }
-      setUser(res);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching user profile:", error);
       toast.error("Error fetching user profile");
     } finally {
       setLoading(false);
     }
-  }
-
-  // const defaultValues: UserFormValue = {
-  //   bio: user?.UserDetail[0]?.bio ?? "",
-  //   skills: user?.UserDetail[0]?.skills ?? [],
-  // };
-
-  const form = useForm<UserFormValue>({
-    resolver: zodResolver(userUpdateValidationSchema),
-    // defaultValues,
-  });
+  };
 
   const onSubmit = async (values: UserFormValue) => {
     setLoading(true);
@@ -69,12 +54,13 @@ export default function ProfileUpdateForm() {
       const response = await crudServices.updateUserDetails(values);
       if (response.error) {
         console.error(response.error);
+        toast.error("Error updating profile");
       } else {
-        toast.success("Details Updated successfully");
-        // console.log(response);
+        toast.success("Profile updated successfully");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error updating profile:", error);
+      toast.error("Error updating profile");
     } finally {
       setLoading(false);
     }
@@ -87,46 +73,40 @@ export default function ProfileUpdateForm() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
-              control={form.control}
               name="bio"
               render={({ field }) => (
-                <FormItem>
+                <div>
                   <FormLabel>Bio</FormLabel>
-                  <FormControl>
-                    <FormCombinedInput
-                      {...field}
-                      type="text"
-                      rows={4}
-                      placeholder="tell us about yourself"
-                      disabled={loading}
-                      //@ts-ignore
-                      defaultValue={user?.UserDetail[0].bio || ""}
-                    />
-                  </FormControl>
+                  <FormCombinedInput
+                    {...field}
+                    type="text"
+                    rows={4}
+                    placeholder="Tell us about yourself"
+                    disabled={loading}
+                    //@ts-ignore
+                    defaultValue={user?.UserDetail[0].bio || ""}
+                  />
                   <FormMessage />
-                </FormItem>
+                </div>
               )}
             />
 
             <FormField
-              control={form.control}
               name="skills"
               render={({ field }) => (
-                <FormItem>
+                <div>
                   <FormLabel>Skills</FormLabel>
-                  <FormControl>
-                    <FormSelectInput
-                      {...field}
-                      options={skills}
-                      placeholder="Select your skills"
-                      multiple={true}
-                      searchable={true}
-                      //@ts-ignore
-                      value={user?.UserDetail[0].skills || []}
-                    />
-                  </FormControl>
+                  <FormSelectInput
+                    {...field}
+                    options={skills}
+                    placeholder="Select your skills"
+                    multiple
+                    searchable
+                    //@ts-ignore
+                    value={user?.UserDetail[0].skills || []}
+                  />
                   <FormMessage />
-                </FormItem>
+                </div>
               )}
             />
 
@@ -138,4 +118,6 @@ export default function ProfileUpdateForm() {
       </div>
     </div>
   );
-}
+};
+
+export default ProfileUpdateForm;

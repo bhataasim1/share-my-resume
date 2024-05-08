@@ -1,140 +1,109 @@
+interface ApiResponse<T> {
+  data?: T;
+  error?: string;
+}
+
 export class CrudServices {
-  baseUrl: string;
-  registerEndpoint: string;
-  updateUserDetailsEndpoint: string;
+  private baseUrl: string;
+  private userEndpoint: string;
 
   constructor() {
     this.baseUrl = "/api";
-    this.registerEndpoint = "/register";
-    this.updateUserDetailsEndpoint = "/user/profile"; // rename the endpoint later to userEndpoint
+    this.userEndpoint = "/user/profile";
   }
 
-  async register(data: any) {
+  private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
+    if (response.ok) {
+      return { data: await response.json() };
+    } else {
+      console.error(`Error: ${response.status} - ${response.statusText}`);
+      return { error: "Request failed" };
+    }
+  }
+
+  private async fetchJson<T>(
+    url: string,
+    options: RequestInit
+  ): Promise<ApiResponse<T>> {
     try {
-      const response = await fetch(`${this.baseUrl}${this.registerEndpoint}`, {
+      const response = await fetch(url, options);
+      return this.handleResponse<T>(response);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      return { error: "Network error" };
+    }
+  }
+
+  async register(data: any): Promise<ApiResponse<any>> {
+    const options: RequestInit = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    };
+
+    return this.fetchJson<any>(`${this.baseUrl}/register`, options);
+  }
+
+  async updateUserDetails(data: any): Promise<ApiResponse<any>> {
+    const options: RequestInit = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    };
+
+    return this.fetchJson<any>(`${this.baseUrl}${this.userEndpoint}`, options);
+  }
+
+  async updateUserAvatar(formData: FormData): Promise<ApiResponse<any>> {
+    const avatarFile = formData.get("avatar") as File;
+
+    if (!avatarFile || avatarFile.size === 0) {
+      return { error: "No file found" };
+    }
+
+    if (avatarFile.size > 500000) {
+      return { error: "File size is too large" };
+    }
+
+    try {
+      const fileContent = await this.readFileAsArrayBuffer(avatarFile);
+      // console.log("fileContent", fileContent);
+      const options: RequestInit = {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.error("Error creating data:", response.statusText);
-        return {
-          error: "Error creating data",
-        };
-      }
-    } catch (error) {
-      console.error("Error creating data:", error);
-      return {
-        error: "Error creating data",
+        body: formData,
       };
-    }
-  }
 
-  async updateUserDetails(data: any) {
-    try {
-      const response = await fetch(
-        `${this.baseUrl}/${this.updateUserDetailsEndpoint}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
+      return this.fetchJson<any>(
+        `${this.baseUrl}${this.userEndpoint}`,
+        options
       );
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.error("Error updating data:", response.statusText);
-        return {
-          error: "Error updating data",
-        };
-      }
-    } catch (error) {
-      console.error("Error updating data:", error);
-      return {
-        error: "Error updating data",
-      };
-    }
-  }
-
-  async updateUserAvatar(formData: FormData) {
-    try {
-      const avatarFile = formData.get("avatar") as File;
-
-      if (!avatarFile || avatarFile.size === 0) {
-        return { error: "No file found" };
-      }
-
-      // 500KB
-      if (avatarFile.size > 500000) {
-        return { error: "File size is too large" };
-      }
-
-      const fileReader = new FileReader();
-      const fileContentPromise = new Promise<ArrayBuffer>((resolve, reject) => {
-        fileReader.onload = () => {
-          resolve(fileReader.result as ArrayBuffer);
-        };
-        fileReader.onerror = reject;
-        fileReader.readAsArrayBuffer(avatarFile);
-      });
-
-      const fileContent = await fileContentPromise;
-      console.log("File Content = ", fileContent);
-
-      const response = await fetch(
-        `${this.baseUrl}/${this.updateUserDetailsEndpoint}`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.error("Error updating image:", response.statusText);
-        return {
-          error: "Error updating image",
-        };
-      }
     } catch (error) {
       console.error("Error updating image:", error);
-      return {
-        error: "Error updating image",
-      };
+      return { error: "Error updating image" };
     }
   }
 
-  async getUserProfile() {
-    try {
-      const res = await fetch(
-        `${this.baseUrl}/${this.updateUserDetailsEndpoint}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+  private readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        if (fileReader.result instanceof ArrayBuffer) {
+          resolve(fileReader.result);
+        } else {
+          reject(new Error("FileReader result is not an ArrayBuffer"));
         }
-      );
-
-      if (res.ok) {
-        return res.json();
-      } else {
-        console.error("Error fetching user profile:", res.statusText);
-        return {
-          error: "Error fetching user profile",
-        };
-      }
-    } catch (error) {
-      console.error("Error fetching user profile:", error);
-      return {
-        error: "Error fetching user profile",
       };
-    }
+      fileReader.onerror = reject;
+      fileReader.readAsArrayBuffer(file);
+    });
+  }
+
+  async getUserProfile(): Promise<ApiResponse<any>> {
+    const options: RequestInit = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    return this.fetchJson<any>(`${this.baseUrl}${this.userEndpoint}`, options);
   }
 }
