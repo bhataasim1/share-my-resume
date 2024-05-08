@@ -1,9 +1,6 @@
-"use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import myImage from "@/public/undraw_male_avatar_g98d.svg";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,11 +13,12 @@ import {
 import { useForm } from "react-hook-form";
 import { userUpdateImageValidationSchema } from "../zodValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { CrudServices } from "../crud/crudServices";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import myImage from "@/public/undraw_male_avatar_g98d.svg";
+import * as z from "zod";
 
 type UserFormValue = z.infer<typeof userUpdateImageValidationSchema>;
 
@@ -28,7 +26,7 @@ const ProfileImageUploadCard = () => {
   const crudServices = new CrudServices();
   const { data: session } = useSession();
   const [loading, setLoading] = useState<boolean>(false);
-  const [image, setImage] = useState<String>();
+  const [image, setImage] = useState<string | undefined>();
   const [uploading, setUploading] = useState<boolean>(false);
 
   const form = useForm<UserFormValue>({
@@ -40,40 +38,50 @@ const ProfileImageUploadCard = () => {
 
   useEffect(() => {
     fetchUserProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function fetchUserProfile() {
+  const fetchUserProfile = async () => {
     setLoading(true);
     try {
       const res = await crudServices.getUserProfile();
-      if (!res) {
-        toast.error("Try Refreshing Again");
+      // console.log("res", res.data);
+      //@ts-ignore
+      if (res) {
+        //@ts-ignore
+        setImage(res.data.UserDetail[0].avatar);
+      } else {
+        toast.error("Failed to fetch user profile. Please try again.");
       }
-      setImage(res.UserDetail[0].avatar);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching user profile:", error);
-      toast.error("Error fetching user profile");
+      toast.error("Failed to fetch user profile. Please try again.");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const onSubmit = async (formData: FormData) => {
-    setUploading(true);
     try {
+      setUploading(true);
       const response = await crudServices.updateUserAvatar(formData);
-      if (response?.error) {
+
+      const image = response.data.data.avatar;
+      // console.log("image", image);
+
+      if (!image) {
+        toast.error("Error updating image");
+      }
+
+      if (response.error) {
         console.error(response.error);
         toast.error("Error updating image");
-      } else {
-        // console.log(response);
-        setImage(response.data.avatar);
-        toast.success("Image Uploaded Successfully");
       }
+
+      setImage(image);
+      toast.success("Image uploaded successfully");
     } catch (error) {
-      console.error(error);
+      console.error("Error updating image:", error);
+      toast.error("Failed to upload image. Please try again.");
     } finally {
       setUploading(false);
     }
