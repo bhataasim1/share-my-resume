@@ -6,10 +6,12 @@ interface ApiResponse<T> {
 export class CrudServices {
   private baseUrl: string;
   private userEndpoint: string;
+  private userEducationEndpoint: string;
 
   constructor() {
     this.baseUrl = "/api";
     this.userEndpoint = "/user/profile";
+    this.userEducationEndpoint = "/user/education";
   }
 
   private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
@@ -105,5 +107,18 @@ export class CrudServices {
     };
 
     return this.fetchJson<any>(`${this.baseUrl}${this.userEndpoint}`, options);
+  }
+
+  async createUserEducation(data: any): Promise<ApiResponse<any>> {
+    const options: RequestInit = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    };
+
+    return this.fetchJson<any>(
+      `${this.baseUrl}${this.userEducationEndpoint}`,
+      options
+    );
   }
 }

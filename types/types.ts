@@ -63,3 +63,13 @@ export type SkillType = {
   label: string;
   value: string;
 }[];
+
+export type EducationType = {
+  school: string;
+  degree: string;
+  cgpa: string;
+  present: boolean;
+  description: string;
+  startYear: string;
+  endYear: string;
+};
