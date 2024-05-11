@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DATABASE_URL")
 }
 
@@ -44,9 +44,11 @@ model UserEducation {
   userDetail   UserDetail @relation(fields: [userDetailId], references: [id])
   school       String
   degree       String
-  field        String
-  startYear    Int
-  endYear      Int
+  cgpa         String
+  present      Boolean
+  description  String
+  startYear    String
+  endYear      String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }
@@ -59,8 +61,9 @@ model UserWork {
   position     String
   skills       String[]
   description  String
-  startYear    Int
-  endYear      Int
+  present      Boolean
+  startYear    String
+  endYear      String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }

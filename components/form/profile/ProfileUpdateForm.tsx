@@ -13,7 +13,6 @@ import { userUpdateValidationSchema } from "../zodValidation";
 import { skills } from "@/constant/skills";
 import ProfileImageUploadCard from "./ProfileImageUploadCard";
 import * as z from "zod";
-// import { UserResponseType } from "@/types/types";
 import { UserResposneType } from "@/types/types";
 
 type UserFormValue = z.infer<typeof userUpdateValidationSchema>;
@@ -49,7 +48,6 @@ const ProfileUpdateForm = () => {
   };
 
   const onSubmit = async (values: UserFormValue) => {
-    setLoading(true);
     try {
       const response = await crudServices.updateUserDetails(values);
       if (response.error) {

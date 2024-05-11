@@ -39,3 +39,21 @@ export const userUpdateValidationSchema = z.object({
 export const userUpdateImageValidationSchema = z.object({
   avatar: z.string(),
 });
+
+export const userCreateEducationValidationSchema = z.object({
+  school: z
+    .string()
+    .min(3, { message: "School name must be at least 3 chars" }),
+  degree: z
+    .string()
+    .min(3, { message: "Degree name must be at least 3 chars" }),
+  cgpa: z.string().min(1, { message: "CGPA must be at least 1 chars" }),
+  present: z.boolean().optional(),
+  description: z
+    .string()
+    .min(3, { message: "Description must be at least 3 chars" }),
+  startYear: z
+    .string()
+    .min(4, { message: "Start year must be at least 4 chars" }),
+  endYear: z.string().min(4, { message: "End year must be at least 4 chars" }),
+});

@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSignedURL } from "./awsActions";
 
 export class UserProfileService {
-  private async getSession() {
+  protected async getSession() {
     return await getServerSession(authOptions);
   }
 
@@ -65,7 +65,7 @@ export class UserProfileService {
     }
   }
 
-  private async findUserById(userId: string | undefined) {
+  protected async findUserById(userId: string | undefined) {
     return await prisma.user.findFirst({
       where: { id: userId },
       select: {
@@ -78,13 +78,25 @@ export class UserProfileService {
             avatar: true,
             bio: true,
             skills: true,
+            education: {
+              select: {
+                id: true,
+                school: true,
+                degree: true,
+                cgpa: true,
+                present: true,
+                description: true,
+                startYear: true,
+                endYear: true,
+              },
+            },
           },
         },
       },
     });
   }
 
-  private async findUserDetailByUserId(userId: string | undefined) {
+  protected async findUserDetailByUserId(userId: string | undefined) {
     return await prisma.userDetail.findFirst({
       where: { userId },
     });
@@ -137,7 +149,7 @@ export class UserProfileService {
         throw new Error("User not found.");
       }
 
-      const filename = `${Date.now()}-${session.user?.name}-avatar.jpg`;
+      const filename = `${Date.now()}-avatar.jpg`;
       const signedUrlResult = await getSignedURL(filename);
 
       //@ts-ignore
