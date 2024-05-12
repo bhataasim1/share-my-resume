@@ -31,6 +31,8 @@ const EducationList = () => {
   const handleCloseEducation = () => {
     localStorage.removeItem("education");
     setShowEducation(false);
+    setEditMode(false);
+    setSelectedEducation(null);
   };
 
   const fetchEducation = async () => {
@@ -41,7 +43,10 @@ const EducationList = () => {
       if (!res || res.error) {
         toast.error("Error fetching user profile");
       } else {
-        setEducation(res.data.UserDetail[0].education);
+        const sortedEducation = res.data.UserDetail[0].education.sort(
+          (a: any, b: any) => parseInt(b.endYear) - parseInt(a.endYear)
+        );
+        setEducation(sortedEducation);
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -90,6 +95,12 @@ const EducationList = () => {
     }
   };
 
+  // Refresh education list after creating or updating education
+  const handleCreateOrUpdate = () => {
+    fetchEducation();
+    handleCloseEducation();
+  };
+
   return (
     <>
       {showEducation ? (
@@ -97,6 +108,7 @@ const EducationList = () => {
           onClose={handleCloseEducation}
           initialData={selectedEducation}
           editMode={editMode}
+          onCreateOrUpdate={handleCreateOrUpdate}
         />
       ) : (
         <div className="flex w-full">

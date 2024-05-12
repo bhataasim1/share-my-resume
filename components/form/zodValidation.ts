@@ -51,7 +51,7 @@ export const userCreateEducationValidationSchema = z.object({
   present: z.boolean().optional(),
   description: z
     .string()
-    .min(3, { message: "Description must be at least 3 chars" }),
+    .min(10, { message: "Description must be at least 3 chars" }),
   startYear: z
     .string()
     .min(4, { message: "Start year must be at least 4 chars" }),
