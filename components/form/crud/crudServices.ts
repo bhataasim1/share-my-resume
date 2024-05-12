@@ -7,11 +7,13 @@ export class CrudServices {
   private baseUrl: string;
   private userEndpoint: string;
   private userEducationEndpoint: string;
+  private userExperienceEndpoint: string;
 
   constructor() {
     this.baseUrl = "/api";
     this.userEndpoint = "/user/profile";
     this.userEducationEndpoint = "/user/education";
+    this.userExperienceEndpoint = "/user/experience";
   }
 
   private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
@@ -143,6 +145,44 @@ export class CrudServices {
 
     return this.fetchJson<any>(
       `${this.baseUrl}${this.userEducationEndpoint}?id=${id}`,
+      options
+    );
+  }
+
+  async createUserExperience(data: any): Promise<ApiResponse<any>> {
+    const options: RequestInit = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    };
+
+    return this.fetchJson<any>(
+      `${this.baseUrl}${this.userExperienceEndpoint}`,
+      options
+    );
+  }
+
+  async deleteUserExperience(id: string): Promise<ApiResponse<any>> {
+    const options: RequestInit = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    return this.fetchJson<any>(
+      `${this.baseUrl}${this.userExperienceEndpoint}?id=${id}`,
+      options
+    );
+  }
+
+  async updateUserExperience(id: string, data: any): Promise<ApiResponse<any>> {
+    const options: RequestInit = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    };
+
+    return this.fetchJson<any>(
+      `${this.baseUrl}${this.userExperienceEndpoint}?id=${id}`,
       options
     );
   }

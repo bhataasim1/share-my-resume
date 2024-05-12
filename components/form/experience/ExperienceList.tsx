@@ -10,48 +10,50 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  LucideBookOpenCheck,
+  LucideBriefcase,
   LucideEdit,
   LucideTimer,
   LucideTrash2,
 } from "lucide-react";
-import EducationForm from "./EducationForm";
 import { CrudServices } from "../crud/crudServices";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import ExperienceForm from "./ExperienceForm";
 
-const EducationList = () => {
-  const [showEducation, setShowEducation] = useState<boolean>(false);
+const ExperienceList = () => {
+  const [showExperience, setShowExperience] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [education, setEducation] = useState<any[]>([]);
+  const [experience, setExperience] = useState<any[]>([]);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [selectedEducation, setSelectedEducation] = useState<any | null>(null);
+  const [selectedExperience, setSelectedExperience] = useState<any | null>(
+    null
+  );
   const crudServices = new CrudServices();
 
-  const handleEducation = () => {
-    localStorage.setItem("education", "true");
-    setShowEducation(true);
+  const handleExperience = () => {
+    localStorage.setItem("experience", "true");
+    setShowExperience(true);
   };
 
-  const handleCloseEducation = () => {
-    localStorage.removeItem("education");
-    setShowEducation(false);
+  const handleCloseExperience = () => {
+    localStorage.removeItem("experience");
+    setShowExperience(false);
     setEditMode(false);
-    setSelectedEducation(null);
+    setSelectedExperience(null);
   };
 
-  const fetchEducation = async () => {
+  const fetchExperience = async () => {
     setLoading(true);
     try {
       const res = await crudServices.getUserProfile();
-      // console.log("res", res.data.UserDetail[0].education);
+      //   console.log("res", res.data.UserDetail[0].work);
       if (!res || res.error) {
         toast.error("Error fetching user profile");
       } else {
-        const sortedEducation = res.data.UserDetail[0].education.sort(
+        const sortedExperience = res.data.UserDetail[0].work.sort(
           (a: any, b: any) => parseInt(b.endYear) - parseInt(a.endYear)
         );
-        setEducation(sortedEducation);
+        setExperience(sortedExperience);
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -62,12 +64,12 @@ const EducationList = () => {
   };
 
   useEffect(() => {
-    const storedShowEducation = localStorage.getItem("education");
-    if (storedShowEducation === "true") {
-      setShowEducation(true);
+    const storedShowExperience = localStorage.getItem("experience");
+    if (storedShowExperience === "true") {
+      setShowExperience(true);
     }
 
-    fetchEducation();
+    fetchExperience();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -75,43 +77,43 @@ const EducationList = () => {
     // console.log("delete", id);
     setLoading(true);
     try {
-      crudServices.deleteUserEducation(id).then((res) => {
+      crudServices.deleteUserExperience(id).then((res) => {
         if (!res || res.error) {
-          toast.error("Error deleting education");
+          toast.error("Error deleting experience");
         } else {
-          toast.success("Education deleted successfully");
-          fetchEducation();
+          toast.success("Experience deleted successfully");
+          fetchExperience();
         }
       });
     } catch (error) {
-      console.error("Error deleting education:", error);
-      toast.error("Error deleting education");
+      console.error("Error deleting experience:", error);
+      toast.error("Error deleting experience");
     } finally {
       setLoading(false);
     }
   };
 
   const handleUpdate = (id: string) => {
-    const selected = education.find((edu) => edu.id === id);
+    const selected = experience.find((exp) => exp.id === id);
     if (selected) {
       setEditMode(true);
-      setSelectedEducation(selected);
-      setShowEducation(true);
+      setSelectedExperience(selected);
+      setShowExperience(true);
     }
   };
 
-  // Refresh education list after creating or updating education
+  // Refresh Experience list after creating or updating Experience
   const handleCreateOrUpdate = () => {
-    fetchEducation();
-    handleCloseEducation();
+    fetchExperience();
+    handleCloseExperience();
   };
 
   return (
     <>
-      {showEducation ? (
-        <EducationForm
-          onClose={handleCloseEducation}
-          initialData={selectedEducation}
+      {showExperience ? (
+        <ExperienceForm
+          onClose={handleCloseExperience}
+          initialData={selectedExperience}
           editMode={editMode}
           onCreateOrUpdate={handleCreateOrUpdate}
         />
@@ -119,9 +121,9 @@ const EducationList = () => {
         <div className="flex w-full">
           <div className="flex-1 p-4 overflow-y-auto">
             <div className="flex justify-between mb-4">
-              <h2 className="text-2xl font-bold">Education List</h2>
-              <Button onClick={handleEducation} variant="secondary">
-                Add Education
+              <h2 className="text-2xl font-bold">{`Experience's`}</h2>
+              <Button onClick={handleExperience} variant="secondary">
+                Add Experience
               </Button>
             </div>
             <div className="flex justify-center">
@@ -132,25 +134,22 @@ const EducationList = () => {
                     <Skeleton className="w-full h-64" />
                   </div>
                 ) : (
-                  education.map((edu, index) => (
+                  experience.map((exp, index) => (
                     <Card key={index} className="flex flex-col w-full mb-3">
                       <div className="flex items-center p-3">
-                        <LucideBookOpenCheck
-                          size={48}
-                          className="w-16 h-16 m-3"
-                        />
+                        <LucideBriefcase size={48} className="w-16 h-16 m-3" />
                         <div className="flex flex-col">
                           <CardHeader>
-                            <CardTitle>{edu.degree}</CardTitle>
-                            <CardDescription>{edu.school}</CardDescription>
+                            <CardTitle>{exp.position}</CardTitle>
+                            <CardDescription>{exp.company}</CardDescription>
                           </CardHeader>
                           <CardContent>
                             <p className="flex gap-1 text-sm">
                               <LucideTimer size={18} />
-                              {`${edu.startYear} - ${
-                                edu.present
+                              {`${exp.startYear} - ${
+                                exp.present
                                   ? "Present"
-                                  : edu.endYear || "Present"
+                                  : exp.endYear
                               }`}
                             </p>
                           </CardContent>
@@ -158,7 +157,7 @@ const EducationList = () => {
                       </div>
                       <CardContent className="flex justify-end">
                         <Button
-                          onClick={() => handleUpdate(edu.id)}
+                          onClick={() => handleUpdate(exp.id)}
                           variant="secondary"
                           className="flex items-center px-3 py-1 rounded mr-2"
                         >
@@ -166,7 +165,7 @@ const EducationList = () => {
                           Edit
                         </Button>
                         <Button
-                          onClick={() => handleDelete(edu.id)}
+                          onClick={() => handleDelete(exp.id)}
                           variant="destructive"
                           className="flex items-center px-3 py-1 rounded"
                         >
@@ -175,7 +174,12 @@ const EducationList = () => {
                         </Button>
                       </CardContent>
                       <CardContent>
-                        <p>{edu.description}</p>
+                        <p>{exp.description}</p>
+                        {exp.skills.length > 0 && (
+                          <p className="text-sm mt-2 capitalize">
+                            Skills: {exp.skills.join(", ")}
+                          </p>
+                        )}
                       </CardContent>
                     </Card>
                   ))
@@ -189,4 +193,4 @@ const EducationList = () => {
   );
 };
 
-export default EducationList;
+export default ExperienceList;

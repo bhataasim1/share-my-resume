@@ -7,7 +7,7 @@ const userProfileService = new UserProfileService();
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
     const user = await userProfileService.getUserProfile(req, res);
-    return NextResponse.json(user);
+    return NextResponse.json(user, { status: 200 });
   } catch (error) {
     console.error("Error handling GET request:", error);
     return NextResponse.json(
@@ -21,7 +21,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
   try {
     const data: userUpdateProfileType = await req.json();
     const user = await userProfileService.updateUserProfile(data);
-    return NextResponse.json(user);
+    return NextResponse.json(user, { status: 200 });
   } catch (error) {
     console.error("Error handling PUT request:", error);
     return NextResponse.json(

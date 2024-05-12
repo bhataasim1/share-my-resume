@@ -10,12 +10,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  USER_DASHBOARD,
-  USER_EDUCATION,
-  USER_EXPERIENCE,
-  USER_RESUME,
-} from "@/constant";
+import { USER_DASHBOARD, USER_EDUCATION, USER_EXPERIENCE } from "@/constant";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -60,9 +55,6 @@ export function UserNav() {
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleRoute(USER_EXPERIENCE)}>
             Experience
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleRoute(USER_RESUME)}>
-            Resume
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
