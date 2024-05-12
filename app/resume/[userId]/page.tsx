@@ -3,7 +3,9 @@
 import { CrudServices } from "@/components/form/crud/crudServices";
 import Resume from "@/components/form/resume/Resme";
 import ResumeSidebar from "@/components/form/resume/ResumeSidebar";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { HashLoader } from "react-spinners";
 import { toast } from "sonner";
 
 export type UserTypes = {
@@ -68,13 +70,29 @@ const Page = ({ params }: { params: { userId: string } }) => {
     fetchProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  if (loading) {
+    return (
+      <div className="flex h-screen justify-center items-center">
+        <HashLoader color="#2563EB" />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="md:flex h-screen">
-        <ResumeSidebar data={user?.UserDetail[0]} />
-        <div className="flex-1 p-2 px-4">
-          <Resume data={user} />
-        </div>
+        {user && user.UserDetail && user.UserDetail.length > 0 ? (
+          <>
+            <ResumeSidebar data={user.UserDetail[0]} />
+            <div className="flex-1 p-2 px-4">
+              <Resume data={user} />
+            </div>
+          </>
+        ) : (
+          <div className="flex h-screen justify-center items-center">
+            <HashLoader color="#2563EB" />
+          </div>
+        )}
       </div>
     </>
   );
