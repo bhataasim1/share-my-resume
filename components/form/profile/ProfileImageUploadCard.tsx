@@ -38,6 +38,7 @@ const ProfileImageUploadCard = () => {
 
   useEffect(() => {
     fetchUserProfile();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchUserProfile = async () => {
@@ -48,7 +49,7 @@ const ProfileImageUploadCard = () => {
       //@ts-ignore
       if (res) {
         //@ts-ignore
-        setImage(res.data.UserDetail[0].avatar);
+        setImage(res?.data?.UserDetail[0]?.avatar);
       } else {
         toast.error("Failed to fetch user profile. Please try again.");
       }
@@ -65,14 +66,14 @@ const ProfileImageUploadCard = () => {
       setUploading(true);
       const response = await crudServices.updateUserAvatar(formData);
 
-      const image = response.data.data.avatar;
+      const image = response?.data?.data?.avatar;
       // console.log("image", image);
 
       if (!image) {
         toast.error("Error updating image");
       }
 
-      if (response.error) {
+      if (response?.error) {
         console.error(response.error);
         toast.error("Error updating image");
       }

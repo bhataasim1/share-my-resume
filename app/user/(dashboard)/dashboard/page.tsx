@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -7,8 +9,11 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function Page() {
+  const { data: session } = useSession();
   return (
     <>
       <div className="flex-1 p-2 px-4">
@@ -18,7 +23,9 @@ export default function Page() {
           </h2>
           <div className="hidden md:flex items-center space-x-2">
             {/* <CalendarDateRangePicker /> */}
-            <Button>Download</Button>
+            <Link href={`/resume/${session?.user?.id}`}>
+              <Button variant="default">View Resume</Button>
+            </Link>
           </div>
         </div>
         <Tabs defaultValue="overview" className="space-y-4">

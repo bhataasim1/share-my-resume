@@ -134,7 +134,7 @@ const ExperienceList = () => {
                     <Skeleton className="w-full h-64" />
                   </div>
                 ) : (
-                  experience.map((exp, index) => (
+                  experience?.map((exp, index) => (
                     <Card key={index} className="flex flex-col w-full mb-3">
                       <div className="flex items-center p-3">
                         <LucideBriefcase size={48} className="w-16 h-16 m-3" />
@@ -174,10 +174,10 @@ const ExperienceList = () => {
                         </Button>
                       </CardContent>
                       <CardContent>
-                        <p>{exp.description}</p>
-                        {exp.skills.length > 0 && (
+                        <p>{exp?.description}</p>
+                        {exp?.skills.length > 0 && (
                           <p className="text-sm mt-2 capitalize">
-                            Skills: {exp.skills.join(", ")}
+                            Skills: {exp?.skills.join(", ")}
                           </p>
                         )}
                       </CardContent>
