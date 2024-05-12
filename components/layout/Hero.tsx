@@ -16,7 +16,7 @@ export default function Hero() {
         <main className="text-5xl md:text-6xl font-bold">
           <h1 className="inline">
             <span className="inline bg-gradient-to-r from-[#c0485a]  to-[#D247BF] text-transparent bg-clip-text">
-              Share My{" "}
+              Share Your{" "}
             </span>
           </h1>
           <h2 className="inline">
@@ -27,7 +27,7 @@ export default function Hero() {
         </main>
 
         <p className="text-xl text-muted-foreground md:w-10/12 mx-auto lg:mx-0">
-          Share My Resume is a platform that allows you to share your resume
+          Share Your Resume is a platform that allows you to share your resume
           with anyone, anywhere, anytime. it helps you to create a digital
           resume that you can share with anyone, anywhere, anytime.
         </p>
