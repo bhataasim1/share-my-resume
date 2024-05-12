@@ -92,42 +92,110 @@ export class UserEducationService extends UserProfileService {
     });
   }
 
-  // public async updateUserEducation(data: userUpdateEducationType) {
-  //     const { name, degree, cgpa, present, description, startYear, endYear } = data;
-  //     const validationResult = userUpdateEducationValidationSchema.safeParse(data);
+  public async deleteUserEducation(id: string) {
+    // console.log("education Services id", id);
+    try {
+      const session = await this.getSession();
 
-  //     if (!validationResult.success) {
-  //     return { error: validationResult.error.errors[0] };
-  //     }
+      if (!session) {
+        return { error: "You are not authorized to access this." };
+      }
 
-  //     try {
-  //     const session = await this.getSession();
+      const userEducation = await this.findUserEducationById(id);
 
-  //     if (!session) {
-  //         return { error: "You are not authorized to access this." };
-  //     }
+      if (!userEducation) {
+        throw new Error("UserEducation not found.");
+      }
 
-  //     const userEducation = await this.findUserEducationByUserId(session.user?.id);
+      const deletedUser = await this.deleteEducation(userEducation.id);
 
-  //     if (!userEducation) {
-  //         throw new Error("UserEducation not found.");
-  //     }
+      return deletedUser;
+    } catch (error) {
+      console.error("Error deleting user education:", error);
+      return error;
+    }
+  }
 
-  //     const updatedUser = await this.updateUserEducation(
-  //         userEducation.id,
-  //         name,
-  //         degree,
-  //         cgpa,
-  //         present,
-  //         description,
-  //         startYear,
-  //         endYear
-  //     );
+  protected async deleteEducation(id: string) {
+    return await prisma.userEducation.delete({
+      where: {
+        id,
+      },
+    });
+  }
 
-  //     return updatedUser;
-  //     } catch (error) {
-  //     console.error("Error updating user education:", error);
-  //     return error;
-  //     }
-  // }
+  protected async findUserEducationById(id: string) {
+    return await prisma.userEducation.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
+  public async updateUserEducation(id: string, data: EducationType) {
+    const { school, degree, cgpa, present, description, startYear, endYear } =
+      data;
+    const validationResult =
+      userCreateEducationValidationSchema.safeParse(data);
+
+    if (!validationResult.success) {
+      return { error: validationResult.error.errors[0] };
+    }
+
+    try {
+      const session = await this.getSession();
+
+      if (!session) {
+        return { error: "You are not authorized to access this." };
+      }
+
+      const userEducation = await this.findUserEducationById(id);
+
+      if (!userEducation) {
+        throw new Error("UserEducation not found.");
+      }
+
+      const updatedUser = await this.updateEducation(
+        userEducation.id,
+        school,
+        degree,
+        cgpa,
+        present,
+        description,
+        startYear,
+        endYear
+      );
+
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating user education:", error);
+      return error;
+    }
+  }
+
+  protected async updateEducation(
+    id: string,
+    school: string,
+    degree: string,
+    cgpa: string,
+    present: boolean,
+    description: string,
+    startYear: string,
+    endYear: string
+  ) {
+    return await prisma.userEducation.update({
+      where: {
+        id,
+      },
+      data: {
+        school,
+        degree,
+        cgpa,
+        present,
+        description,
+        startYear,
+        endYear,
+      },
+    });
+  }
 }

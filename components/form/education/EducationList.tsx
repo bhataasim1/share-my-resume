@@ -19,13 +19,17 @@ const EducationList = () => {
   const [showEducation, setShowEducation] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [education, setEducation] = useState<any[]>([]);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [selectedEducation, setSelectedEducation] = useState<any | null>(null);
   const crudServices = new CrudServices();
 
   const handleEducation = () => {
+    localStorage.setItem("education", "true");
     setShowEducation(true);
   };
 
   const handleCloseEducation = () => {
+    localStorage.removeItem("education");
     setShowEducation(false);
   };
 
@@ -33,7 +37,7 @@ const EducationList = () => {
     setLoading(true);
     try {
       const res = await crudServices.getUserProfile();
-      console.log("res", res.data.UserDetail[0].education);
+      // console.log("res", res.data.UserDetail[0].education);
       if (!res || res.error) {
         toast.error("Error fetching user profile");
       } else {
@@ -48,17 +52,52 @@ const EducationList = () => {
   };
 
   useEffect(() => {
+    const storedShowEducation = localStorage.getItem("education");
+    if (storedShowEducation === "true") {
+      setShowEducation(true);
+    }
+
     fetchEducation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleDelete = () => {
-    console.log("delete");
+  const handleDelete = (id: string) => {
+    // console.log("delete", id);
+    setLoading(true);
+    try {
+      crudServices.deleteUserEducation(id).then((res) => {
+        if (!res || res.error) {
+          toast.error("Error deleting education");
+        } else {
+          toast.success("Education deleted successfully");
+          fetchEducation();
+        }
+      });
+    } catch (error) {
+      console.error("Error deleting education:", error);
+      toast.error("Error deleting education");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleUpdate = (id: string) => {
+    const selected = education.find((edu) => edu.id === id);
+    if (selected) {
+      setEditMode(true);
+      setSelectedEducation(selected);
+      setShowEducation(true);
+    }
+  };
+
   return (
     <>
       {showEducation ? (
-        <EducationForm onClose={handleCloseEducation} />
+        <EducationForm
+          onClose={handleCloseEducation}
+          initialData={selectedEducation}
+          editMode={editMode}
+        />
       ) : (
         <div className="flex w-full">
           <div className="flex-1 p-4 overflow-y-auto">
@@ -92,6 +131,7 @@ const EducationList = () => {
                       </div>
                       <CardContent className="flex justify-end">
                         <Button
+                          onClick={() => handleUpdate(edu.id)}
                           variant="secondary"
                           className="flex items-center px-3 py-1 rounded mr-2"
                         >
@@ -99,7 +139,7 @@ const EducationList = () => {
                           Edit
                         </Button>
                         <Button
-                          onClick={handleDelete}
+                          onClick={() => handleDelete(edu.id)}
                           variant="destructive"
                           className="flex items-center px-3 py-1 rounded"
                         >

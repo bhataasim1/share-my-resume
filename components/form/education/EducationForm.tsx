@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -24,11 +24,17 @@ type OnCloseFunction = () => void;
 
 type EducationFormProps = {
   onClose: OnCloseFunction;
+  initialData?: any;
+  editMode: boolean;
 };
 
 type EducationFormValues = z.infer<typeof userCreateEducationValidationSchema>;
 
-const EducationForm = ({ onClose }: EducationFormProps) => {
+const EducationForm = ({
+  onClose,
+  initialData,
+  editMode,
+}: EducationFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const EducationDefaultValues = {
@@ -45,24 +51,35 @@ const EducationForm = ({ onClose }: EducationFormProps) => {
 
   const form = useForm<EducationFormValues>({
     resolver: zodResolver(userCreateEducationValidationSchema),
-    defaultValues: EducationDefaultValues,
+    defaultValues: initialData,
   });
 
   const onSubmit = async (values: EducationFormValues) => {
     try {
       setLoading(true);
-      console.log("Form values:", values);
-      const response = await crudServices.createUserEducation(values);
-      console.log("Response:", response);
-      toast.success("Education added successfully");
+      const response = editMode
+        ? await crudServices.updateUserEducation(initialData.id, values)
+        : await crudServices.createUserEducation(values);
+        console.log("Response:", response);
+      toast.success(
+        editMode
+          ? "Education updated successfully"
+          : "Education added successfully"
+      );
       onClose();
     } catch (error) {
       console.error("Form submission error:", error);
-      toast.error("Failed to add education.");
+      toast.error(`Failed to ${editMode ? "update" : "add"} education.`);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (editMode && initialData) {
+      form.reset(initialData);
+    }
+  }, [editMode, initialData, form]);
 
   return (
     <div className="flex flex-col w-full">
@@ -192,8 +209,8 @@ const EducationForm = ({ onClose }: EducationFormProps) => {
                           <FormControl>
                             <Checkbox
                               {...field}
-                              defaultChecked={field.value}
-                              onChange={field.onChange}
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
                             />
                           </FormControl>
                           <FormLabel>Present</FormLabel>
@@ -224,7 +241,13 @@ const EducationForm = ({ onClose }: EducationFormProps) => {
                 />
 
                 <Button disabled={loading} className="w-full" type="submit">
-                  {loading ? "Adding Education.." : "Add Education"}
+                  {loading
+                    ? editMode
+                      ? "Updating..."
+                      : "Adding..."
+                    : editMode
+                    ? "Update Education"
+                    : "Add Education"}
                 </Button>
               </form>
             </Form>

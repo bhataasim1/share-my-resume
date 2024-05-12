@@ -121,4 +121,29 @@ export class CrudServices {
       options
     );
   }
+
+  async deleteUserEducation(id: string): Promise<ApiResponse<any>> {
+    const options: RequestInit = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    return this.fetchJson<any>(
+      `${this.baseUrl}${this.userEducationEndpoint}?id=${id}`,
+      options
+    );
+  }
+
+  async updateUserEducation(id: string, data: any): Promise<ApiResponse<any>> {
+    const options: RequestInit = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    };
+
+    return this.fetchJson<any>(
+      `${this.baseUrl}${this.userEducationEndpoint}?id=${id}`,
+      options
+    );
+  }
 }

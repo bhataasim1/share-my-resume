@@ -45,7 +45,7 @@ model UserEducation {
   school       String
   degree       String
   cgpa         String
-  present      Boolean
+  present      Boolean?
   description  String
   startYear    String
   endYear      String
