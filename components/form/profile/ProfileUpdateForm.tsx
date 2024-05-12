@@ -14,6 +14,7 @@ import { skills } from "@/constant/skills";
 import ProfileImageUploadCard from "./ProfileImageUploadCard";
 import * as z from "zod";
 import { UserResposneType } from "@/types/types";
+import { HashLoader } from "react-spinners";
 
 type UserFormValue = z.infer<typeof userUpdateValidationSchema>;
 
@@ -64,49 +65,61 @@ const ProfileUpdateForm = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center">
+        <HashLoader color="#2563EB" className="flex items-center justify-center align-middle" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col flex-1 justify-center items-center p-6">
       <ProfileImageUploadCard />
       <div className="max-w-lg w-full">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              name="bio"
-              render={({ field }) => (
-                <div>
-                  <FormLabel>Bio</FormLabel>
-                  <FormCombinedInput
-                    {...field}
-                    type="text"
-                    rows={4}
-                    placeholder="Tell us about yourself"
-                    disabled={loading}
-                    //@ts-ignore
-                    defaultValue={user?.UserDetail[0].bio || ""}
-                  />
-                  <FormMessage />
-                </div>
-              )}
-            />
+            {user && user.UserDetail && (
+              <>
+                <FormField
+                  name="bio"
+                  render={({ field }) => (
+                    <div>
+                      <FormLabel>Bio</FormLabel>
+                      <FormCombinedInput
+                        {...field}
+                        type="text"
+                        rows={4}
+                        placeholder="Tell us about yourself"
+                        disabled={loading}
+                        //@ts-ignore
+                        defaultValue={user?.UserDetail[0]?.bio || ""}
+                      />
+                      <FormMessage />
+                    </div>
+                  )}
+                />
 
-            <FormField
-              name="skills"
-              render={({ field }) => (
-                <div>
-                  <FormLabel>Skills</FormLabel>
-                  <FormSelectInput
-                    {...field}
-                    options={skills}
-                    placeholder="Select your skills"
-                    multiple
-                    searchable
-                    //@ts-ignore
-                    value={user?.UserDetail[0].skills || []}
-                  />
-                  <FormMessage />
-                </div>
-              )}
-            />
+                <FormField
+                  name="skills"
+                  render={({ field }) => (
+                    <div>
+                      <FormLabel>Skills</FormLabel>
+                      <FormSelectInput
+                        {...field}
+                        options={skills}
+                        placeholder="Select your skills"
+                        multiple
+                        searchable
+                        //@ts-ignore
+                        value={user?.UserDetail[0]?.skills || []}
+                      />
+                      <FormMessage />
+                    </div>
+                  )}
+                />
+              </>
+            )}
 
             <Button disabled={loading} className="w-full" type="submit">
               {loading ? "Updating..." : "Update Profile"}
