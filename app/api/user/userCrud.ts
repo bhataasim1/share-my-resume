@@ -31,6 +31,19 @@ export class UserProfileService {
     }
   }
 
+  public async getUserProfileById(id: string) {
+    try {
+      const user = await this.findUserById(id);
+      if (!user) {
+        return { error: "User not found." };
+      }
+      return user;
+    } catch (error) {
+      console.error("Error fetching user profile by id:", error);
+      return error;
+    }
+  }
+
   public async updateUserProfile(data: userUpdateProfileType) {
     const { bio, skills } = data;
     const validationResult = userUpdateValidationSchema.safeParse(data);

@@ -48,7 +48,7 @@ const EducationList = () => {
       if (!res || res.error) {
         toast.error("Error fetching user profile");
       } else {
-        const sortedEducation = res.data.UserDetail[0].education.sort(
+        const sortedEducation = res?.data?.UserDetail[0]?.education.sort(
           (a: any, b: any) => parseInt(b.endYear) - parseInt(a.endYear)
         );
         setEducation(sortedEducation);
@@ -132,7 +132,7 @@ const EducationList = () => {
                     <Skeleton className="w-full h-64" />
                   </div>
                 ) : (
-                  education.map((edu, index) => (
+                  education?.map((edu, index) => (
                     <Card key={index} className="flex flex-col w-full mb-3">
                       <div className="flex items-center p-3">
                         <LucideBookOpenCheck
@@ -158,7 +158,7 @@ const EducationList = () => {
                       </div>
                       <CardContent className="flex justify-end">
                         <Button
-                          onClick={() => handleUpdate(edu.id)}
+                          onClick={() => handleUpdate(edu?.id)}
                           variant="secondary"
                           className="flex items-center px-3 py-1 rounded mr-2"
                         >
@@ -166,7 +166,7 @@ const EducationList = () => {
                           Edit
                         </Button>
                         <Button
-                          onClick={() => handleDelete(edu.id)}
+                          onClick={() => handleDelete(edu?.id)}
                           variant="destructive"
                           className="flex items-center px-3 py-1 rounded"
                         >
@@ -175,7 +175,7 @@ const EducationList = () => {
                         </Button>
                       </CardContent>
                       <CardContent>
-                        <p>{edu.description}</p>
+                        <p>{edu?.description}</p>
                       </CardContent>
                     </Card>
                   ))

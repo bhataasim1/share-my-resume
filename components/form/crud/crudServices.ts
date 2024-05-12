@@ -8,12 +8,14 @@ export class CrudServices {
   private userEndpoint: string;
   private userEducationEndpoint: string;
   private userExperienceEndpoint: string;
+  private userResumeEndpoint: string;
 
   constructor() {
     this.baseUrl = "/api";
     this.userEndpoint = "/user/profile";
     this.userEducationEndpoint = "/user/education";
     this.userExperienceEndpoint = "/user/experience";
+    this.userResumeEndpoint = "/user/resume";
   }
 
   private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
@@ -109,6 +111,18 @@ export class CrudServices {
     };
 
     return this.fetchJson<any>(`${this.baseUrl}${this.userEndpoint}`, options);
+  }
+
+  async getUserProfileById(id: string): Promise<ApiResponse<any>> {
+    const options: RequestInit = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    return this.fetchJson<any>(
+      `${this.baseUrl}${this.userResumeEndpoint}?id=${id}`,
+      options
+    );
   }
 
   async createUserEducation(data: any): Promise<ApiResponse<any>> {
