@@ -55,5 +55,36 @@ export const userCreateEducationValidationSchema = z.object({
   startYear: z
     .string()
     .min(4, { message: "Start year must be at least 4 chars" }),
-  endYear: z.string().min(4, { message: "End year must be at least 4 chars" }),
+  endYear: z
+    .string()
+    .min(4, { message: "End year must be at least 4 chars" })
+    .optional()
+    .or(
+      z.string().min(4, { message: "End year must be at least 4 chars" }).max(4)
+    ),
+});
+
+export const userExperienceValidationSchema = z.object({
+  company: z
+    .string()
+    .min(3, { message: "Company name must be at least 3 chars" }),
+  position: z.string().min(3, { message: "Position must be at least 3 chars" }),
+  description: z
+    .string()
+    .min(10, { message: "Description must be at least 10 chars" }),
+  present: z.boolean().optional(),
+  skills: z
+    .array(z.string())
+    .max(10, { message: "Select at most two skills" })
+    .nonempty({ message: "Select at least one skill" })
+    .optional(),
+  startYear: z
+    .string()
+    .min(4, { message: "Start year must be at least 4 chars" }),
+  endYear: z
+    .string()
+    .optional()
+    .or(
+      z.string().min(4, { message: "End year must be at least 4 chars" }).max(4)
+    ),
 });

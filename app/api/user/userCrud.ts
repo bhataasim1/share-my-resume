@@ -90,6 +90,18 @@ export class UserProfileService {
                 endYear: true,
               },
             },
+            work: {
+              select: {
+                id: true,
+                company: true,
+                position: true,
+                description: true,
+                startYear: true,
+                endYear: true,
+                skills: true,
+                present: true,
+              },
+            },
           },
         },
       },

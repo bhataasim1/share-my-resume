@@ -48,7 +48,7 @@ model UserEducation {
   present      Boolean?   @default(false)
   description  String
   startYear    String
-  endYear      String
+  endYear      String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }
@@ -63,7 +63,7 @@ model UserWork {
   description  String
   present      Boolean
   startYear    String
-  endYear      String
+  endYear      String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }

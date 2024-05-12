@@ -73,3 +73,13 @@ export type EducationType = {
   startYear: string;
   endYear: string;
 };
+
+export type ExperienceType = {
+  company: string;
+  position: string;
+  description: string;
+  present: boolean;
+  skills: string[];
+  startYear: string;
+  endYear: string;
+};

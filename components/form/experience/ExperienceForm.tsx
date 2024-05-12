@@ -15,64 +15,65 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LucideSquareArrowLeft } from "lucide-react";
 import * as z from "zod";
-import { userCreateEducationValidationSchema } from "@/components/form/zodValidation";
+import { userExperienceValidationSchema } from "@/components/form/zodValidation";
 import { CrudServices } from "../crud/crudServices";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { FormSelectInput } from "@/components/common/FormSelectInput";
+import { skills } from "@/constant/skills";
 
 type OnCloseFunction = () => void;
 
-type EducationFormProps = {
+type ExperienceFormProps = {
   onClose: OnCloseFunction;
   initialData?: any;
   editMode: boolean;
   onCreateOrUpdate?: () => void;
 };
 
-type EducationFormValues = z.infer<typeof userCreateEducationValidationSchema>;
+type ExperienceFormValues = z.infer<typeof userExperienceValidationSchema>;
 
-const EducationForm = ({
+const ExperienceForm = ({
   onClose,
   initialData,
   editMode,
   onCreateOrUpdate,
-}: EducationFormProps) => {
+}: ExperienceFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  // const EducationDefaultValues = {
-  //   school: "Islamic University Of Science And Technology",
-  //   degree: "Bachelor Of Technology In Computer Science & Engineering",
-  //   startYear: "2020",
-  //   endYear: "2024",
-  //   cgpa: "8.0",
-  //   present: true,
-  //   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  // };
+  //   const ExperienceDefaultValues = {
+  //     company: "Share Your Resume",
+  //     position: "Software Engineer",
+  //     startYear: "2020",
+  //     endYear: "2021",
+  //     description: "Software Engineer at Share Your Resume",
+  //     present: false,
+  //   };
 
   const crudServices = new CrudServices();
 
-  const form = useForm<EducationFormValues>({
-    resolver: zodResolver(userCreateEducationValidationSchema),
+  const form = useForm<ExperienceFormValues>({
+    resolver: zodResolver(userExperienceValidationSchema),
     defaultValues: initialData,
   });
 
-  const onSubmit = async (values: EducationFormValues) => {
+  const onSubmit = async (values: ExperienceFormValues) => {
     try {
       setLoading(true);
       const response = editMode
-        ? await crudServices.updateUserEducation(initialData.id, values)
-        : await crudServices.createUserEducation(values);
+        ? await crudServices.updateUserExperience(initialData.id, values)
+        : await crudServices.createUserExperience(values);
       console.log("Response:", response);
       toast.success(
         editMode
-          ? "Education updated successfully"
-          : "Education added successfully"
+          ? "Experience updated successfully"
+          : "Experience added successfully"
       );
       onCreateOrUpdate && onCreateOrUpdate();
       onClose();
     } catch (error) {
       console.error("Form submission error:", error);
-      toast.error(`Failed to ${editMode ? "update" : "add"} education.`);
+      toast.error(`Failed to ${editMode ? "update" : "add"} Experience.`);
     } finally {
       setLoading(false);
     }
@@ -102,15 +103,15 @@ const EducationForm = ({
               >
                 <FormField
                   control={form.control}
-                  name="school"
+                  name="company"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>College</FormLabel>
+                      <FormLabel>Company Name</FormLabel>
                       <FormControl>
                         <FormCombinedInput
                           {...field}
                           type="text"
-                          placeholder="College Name"
+                          placeholder="Company Name"
                           disabled={loading}
                         />
                       </FormControl>
@@ -121,41 +122,20 @@ const EducationForm = ({
 
                 <FormField
                   control={form.control}
-                  name="degree"
+                  name="position"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Degree</FormLabel>
+                      <FormLabel>Position</FormLabel>
                       <FormControl>
                         <FormCombinedInput
                           {...field}
                           type="text"
-                          placeholder="Degree"
+                          placeholder="Eg. Software Engineer"
                           disabled={loading}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="cgpa"
-                  render={({ field }) => (
-                    <div className="flex-1">
-                      <FormItem>
-                        <FormLabel>CGPA</FormLabel>
-                        <FormControl>
-                          <FormCombinedInput
-                            {...field}
-                            type="text"
-                            placeholder="Your CGPA"
-                            disabled={loading}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    </div>
                   )}
                 />
 
@@ -224,6 +204,24 @@ const EducationForm = ({
                 </div>
 
                 <FormField
+                  name="skills"
+                  render={({ field }) => (
+                    <div>
+                      <FormLabel>Skills</FormLabel>
+                      <FormSelectInput
+                        {...field}
+                        options={skills}
+                        placeholder="Select your skills"
+                        multiple
+                        searchable
+                        animated={true}
+                      />
+                      <FormMessage />
+                    </div>
+                  )}
+                />
+
+                <FormField
                   control={form.control}
                   name="description"
                   render={({ field }) => (
@@ -234,7 +232,7 @@ const EducationForm = ({
                           {...field}
                           type="text"
                           rows={4}
-                          placeholder="Description"
+                          placeholder="Some description about your experience."
                           disabled={loading}
                         />
                       </FormControl>
@@ -249,8 +247,8 @@ const EducationForm = ({
                       ? "Updating..."
                       : "Adding..."
                     : editMode
-                    ? "Update Education"
-                    : "Add Education"}
+                    ? "Update Experience"
+                    : "Add Experience"}
                 </Button>
               </form>
             </Form>
@@ -261,4 +259,4 @@ const EducationForm = ({
   );
 };
 
-export default EducationForm;
+export default ExperienceForm;

@@ -1,14 +1,16 @@
-import { EducationType } from "@/types/types";
+import { ExperienceType } from "@/types/types";
 import { NextRequest, NextResponse } from "next/server";
-import { UserEducationService } from "./educationServices";
+import { UserExperienceServices } from "./experienceServices";
 
-const userEducationService = new UserEducationService();
+const userExperienceService = new UserExperienceServices();
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    const data: EducationType = await req.json();
-    const userEducation = await userEducationService.createUserEducation(data);
-    return NextResponse.json(userEducation, { status: 201 });
+    const data: ExperienceType = await req.json();
+    const userExperience = await userExperienceService.createUserExperience(
+      data
+    );
+    return NextResponse.json(userExperience, { status: 201 });
   } catch (error) {
     console.error("Error handling POST request:", error);
     return NextResponse.json(
@@ -21,9 +23,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 export async function DELETE(req: NextRequest, res: NextResponse) {
   try {
     const id = req.nextUrl.searchParams.get("id") as string;
-    // console.log("Route id", id);
-    const userEducation = await userEducationService.deleteUserEducation(id);
-    return NextResponse.json(userEducation, { status: 200 });
+    const userExperience = await userExperienceService.deleteUserExperience(id);
+    return NextResponse.json(userExperience, { status: 200 });
   } catch (error) {
     console.error("Error handling DELETE request:", error);
     return NextResponse.json(
@@ -36,12 +37,12 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
 export async function PUT(req: NextRequest, res: NextResponse) {
   try {
     const id = req.nextUrl.searchParams.get("id") as string;
-    const data: EducationType = await req.json();
-    const userEducation = await userEducationService.updateUserEducation(
+    const data: ExperienceType = await req.json();
+    const userExperience = await userExperienceService.updateUserExperience(
       id,
       data
     );
-    return NextResponse.json(userEducation, { status: 200 });
+    return NextResponse.json(userExperience, { status: 200 });
   } catch (error) {
     console.error("Error handling PUT request:", error);
     return NextResponse.json(
