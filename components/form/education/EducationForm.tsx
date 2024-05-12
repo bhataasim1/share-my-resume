@@ -26,6 +26,7 @@ type EducationFormProps = {
   onClose: OnCloseFunction;
   initialData?: any;
   editMode: boolean;
+  onCreateOrUpdate?: () => void;
 };
 
 type EducationFormValues = z.infer<typeof userCreateEducationValidationSchema>;
@@ -34,6 +35,7 @@ const EducationForm = ({
   onClose,
   initialData,
   editMode,
+  onCreateOrUpdate,
 }: EducationFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -60,12 +62,13 @@ const EducationForm = ({
       const response = editMode
         ? await crudServices.updateUserEducation(initialData.id, values)
         : await crudServices.createUserEducation(values);
-        console.log("Response:", response);
+      console.log("Response:", response);
       toast.success(
         editMode
           ? "Education updated successfully"
           : "Education added successfully"
       );
+      onCreateOrUpdate && onCreateOrUpdate();
       onClose();
     } catch (error) {
       console.error("Form submission error:", error);
