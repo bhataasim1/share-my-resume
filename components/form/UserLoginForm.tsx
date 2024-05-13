@@ -33,7 +33,7 @@ export default function UserLoginForm() {
   };
   const form = useForm<UserFormValue>({
     resolver: zodResolver(userSigninValidationSchema),
-    defaultValues,
+    // defaultValues,
   });
   const router = useRouter();
 
@@ -107,9 +107,10 @@ export default function UserLoginForm() {
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <FormCombinedInput
-                    type="password"
-                    disabled={loading}
                     {...field}
+                    type="password"
+                    placeholder="Enter your password..."
+                    disabled={loading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -133,7 +134,7 @@ export default function UserLoginForm() {
         </div>
       </div>
       {/* <GoogleSignInButton /> */}
-      <Button variant="outline" className="w-full">
+      <Button variant="outline" className="w-full" disabled>
         Login with Google
       </Button>
     </>

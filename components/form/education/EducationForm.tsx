@@ -39,16 +39,6 @@ const EducationForm = ({
 }: EducationFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  // const EducationDefaultValues = {
-  //   school: "Islamic University Of Science And Technology",
-  //   degree: "Bachelor Of Technology In Computer Science & Engineering",
-  //   startYear: "2020",
-  //   endYear: "2024",
-  //   cgpa: "8.0",
-  //   present: true,
-  //   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  // };
-
   const crudServices = new CrudServices();
 
   const form = useForm<EducationFormValues>({
@@ -62,7 +52,7 @@ const EducationForm = ({
       const response = editMode
         ? await crudServices.updateUserEducation(initialData.id, values)
         : await crudServices.createUserEducation(values);
-      console.log("Response:", response);
+      // console.log("Response:", response);
       toast.success(
         editMode
           ? "Education updated successfully"

@@ -28,17 +28,17 @@ export default function UserSignUpForm() {
 
   const crudServices = new CrudServices();
 
-  const defaultValues = {
-    name: userDefaultValues.name,
-    username: userDefaultValues.username,
-    email: userDefaultValues.email,
-    password: userDefaultValues.password,
-    confirmPassword: userDefaultValues.confirmPassword,
-  };
+  // const defaultValues = {
+  //   name: userDefaultValues.name,
+  //   username: userDefaultValues.username,
+  //   email: userDefaultValues.email,
+  //   password: userDefaultValues.password,
+  //   confirmPassword: userDefaultValues.confirmPassword,
+  // };
 
   const form = useForm<UserFormValue>({
     resolver: zodResolver(userSignUpValidationSchema),
-    defaultValues,
+    // defaultValues,
   });
 
   const onSubmit = async (values: UserFormValue) => {
@@ -172,7 +172,7 @@ export default function UserSignUpForm() {
           </span>
         </div>
       </div>
-      <Button variant="outline" className="w-full">
+      <Button variant="outline" className="w-full" disabled>
         SignUp with Google
       </Button>
     </>

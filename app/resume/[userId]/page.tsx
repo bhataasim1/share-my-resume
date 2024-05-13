@@ -52,7 +52,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
     setLoading(true);
     try {
       const res = await crudServices.getUserProfileById(params.userId);
-      console.log("res", res.data);
+      // console.log("res", res.data);
       if (!res || res.error) {
         toast.error("Error fetching user profile");
       } else {
