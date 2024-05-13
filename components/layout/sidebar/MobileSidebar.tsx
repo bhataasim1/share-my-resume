@@ -55,6 +55,15 @@ export default function MobileSidebar({
                     <>
                       <Nav items={dashboardNavItems} setOpen={setIsOpen} />
 
+                      <Link
+                        href={`/resume/${session?.user?.id}`}
+                        target="_blank"
+                      >
+                        <Button variant="outline" className="w-full mt-3">
+                          View Your Resume
+                        </Button>
+                      </Link>
+
                       <Button
                         variant="default"
                         className="w-full md:w-auto"

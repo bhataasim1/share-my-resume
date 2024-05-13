@@ -21,11 +21,6 @@ export default function Page() {
             👋
           </h2>
         </div>
-        <div className="flex justify-center items-center space-x-2 m-4">
-          <Link href={`/resume/${session?.user?.id}`}>
-            <Button variant="default">View Your Resume</Button>
-          </Link>
-        </div>
         <div className="flex justify-center items-center object-cover m-3">
           <Image src={dashboardImage} alt="DashboardImage" priority />
         </div>

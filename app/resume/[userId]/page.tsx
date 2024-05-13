@@ -81,17 +81,13 @@ const Page = ({ params }: { params: { userId: string } }) => {
   return (
     <>
       <div className="md:flex h-screen">
-        {user && user.UserDetail && user.UserDetail.length > 0 ? (
+        {user && user.UserDetail && user.UserDetail.length > 0 && (
           <>
             <ResumeSidebar data={user.UserDetail[0]} />
             <div className="flex-1 p-2 px-4">
               <Resume data={user} />
             </div>
           </>
-        ) : (
-          <div className="flex h-screen justify-center items-center">
-            <HashLoader color="#2563EB" />
-          </div>
         )}
       </div>
     </>
