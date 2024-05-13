@@ -67,8 +67,10 @@ const ProfileUpdateForm = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center">
-        <HashLoader color="#2563EB" className="flex items-center justify-center align-middle" />
+      <div className="flex-1 p-2 px-4">
+        <div className="flex justify-center items-center">
+          <HashLoader color="#2563EB" />
+        </div>
       </div>
     );
   }
