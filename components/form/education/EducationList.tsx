@@ -19,6 +19,7 @@ import EducationForm from "./EducationForm";
 import { CrudServices } from "../crud/crudServices";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { sortDataValues } from "@/lib/sortData";
 
 const EducationList = () => {
   const [showEducation, setShowEducation] = useState<boolean>(false);
@@ -49,7 +50,8 @@ const EducationList = () => {
         toast.error("Error fetching user profile");
       } else {
         const sortedEducation = res?.data?.UserDetail[0]?.education.sort(
-          (a: any, b: any) => parseInt(b.endYear) - parseInt(a.endYear)
+          // (a: any, b: any) => parseInt(b.endYear) - parseInt(a.endYear)
+          sortDataValues
         );
         setEducation(sortedEducation);
       }

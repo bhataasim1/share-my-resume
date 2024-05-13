@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { LucideTimer } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { sortDataValues } from "@/lib/sortData";
 
 type ResumeSidebarProps = {
   avatar?: string;
@@ -29,6 +30,7 @@ type ResumeSidebarProps = {
 };
 
 const ResumeSidebar = ({ data }: { data?: ResumeSidebarProps }) => {
+  const sortedEducation = data?.education?.sort(sortDataValues);
   return (
     <div className="w-full lg:w-1/4 lg:border-r-2 lg:border-orange-600">
       <div className="flex items-center justify-center mb-4">
@@ -61,8 +63,8 @@ const ResumeSidebar = ({ data }: { data?: ResumeSidebarProps }) => {
           Education :
         </div>
         <div>
-          {data?.education &&
-            data.education.map((edu, index) => (
+          {sortedEducation &&
+            sortedEducation.map((edu, index) => (
               <Card key={index} className="flex m-2">
                 <div className="flex">
                   <div className="flex flex-col capitalize">
@@ -87,6 +89,5 @@ const ResumeSidebar = ({ data }: { data?: ResumeSidebarProps }) => {
     </div>
   );
 };
-
 
 export default ResumeSidebar;
