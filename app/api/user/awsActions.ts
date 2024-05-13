@@ -14,15 +14,15 @@ export async function getSignedURL(filename: string) {
     }
 
     const s3 = new S3Client({
-      region: process.env.AWS_REGION!,
+      region: process.env.MY_AWS_REGION!,
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY!,
-        secretAccessKey: process.env.AWS_SECRET_KEY!,
+        accessKeyId: process.env.MY_AWS_ACCESS_KEY!,
+        secretAccessKey: process.env.MY_AWS_SECRET_KEY!,
       },
     });
 
     const putObjectCommand = new PutObjectCommand({
-      Bucket: process.env.AWS_BUCKET_NAME!,
+      Bucket: process.env.MY_AWS_BUCKET_NAME!,
       Key: filename,
     });
 
