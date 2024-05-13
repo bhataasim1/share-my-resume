@@ -48,7 +48,7 @@ export const userCreateEducationValidationSchema = z.object({
     .string()
     .min(3, { message: "Degree name must be at least 3 chars" }),
   cgpa: z.string().min(1, { message: "CGPA must be at least 1 chars" }),
-  present: z.boolean().optional(),
+  present: z.boolean().default(false).optional(),
   description: z
     .string()
     .min(10, { message: "Description must be at least 3 chars" }),
@@ -72,7 +72,7 @@ export const userExperienceValidationSchema = z.object({
   description: z
     .string()
     .min(10, { message: "Description must be at least 10 chars" }),
-  present: z.boolean().optional(),
+  present: z.boolean().default(false).optional(),
   skills: z
     .array(z.string())
     .max(10, { message: "Select at most two skills" })

@@ -61,7 +61,7 @@ model UserWork {
   position     String
   skills       String[]
   description  String
-  present      Boolean
+  present      Boolean?   @default(false)
   startYear    String
   endYear      String?
   createdAt    DateTime   @default(now())
