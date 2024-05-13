@@ -31,10 +31,10 @@ CREATE TABLE "UserEducation" (
     "school" TEXT NOT NULL,
     "degree" TEXT NOT NULL,
     "cgpa" TEXT NOT NULL,
-    "present" BOOLEAN,
+    "present" BOOLEAN DEFAULT false,
     "description" TEXT NOT NULL,
     "startYear" TEXT NOT NULL,
-    "endYear" TEXT NOT NULL,
+    "endYear" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -51,7 +51,7 @@ CREATE TABLE "UserWork" (
     "description" TEXT NOT NULL,
     "present" BOOLEAN NOT NULL,
     "startYear" TEXT NOT NULL,
-    "endYear" TEXT NOT NULL,
+    "endYear" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
