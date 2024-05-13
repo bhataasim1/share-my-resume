@@ -8,19 +8,22 @@ export const userRegisterSchema = z.object({
 });
 
 export const userCreateEducationValidationSchema = z.object({
-  school: z.string().min(3, "College name must be at least 3 chars").max(100),
-  degree: z.string().min(3, "Degree must be at least 3 chars").max(100),
-  cgpa: z.string().min(1, "CGPA must be at least 1 chars").max(5),
-  present: z.boolean().default(false).optional(),
-  description: z
+  school: z
     .string()
-    .min(10, "Description must be at least 10 chars")
-    .max(100),
-  startYear: z.string().min(4, "Start Year must be at least 4 chars").max(4),
+    .min(3, "College name must be at least 3 chars")
+    .max(200, "College name must be less than 200 chars"),
+  degree: z
+    .string()
+    .min(3, "Degree must be at least 3 chars")
+    .max(200, "Degree must be less than 200 chars"),
+  cgpa: z.string().min(1, "CGPA must be at least 1 chars").max(5, "CGPA should be less than 5 chars"),
+  present: z.boolean().default(false).optional(),
+  description: z.string().min(10, "Description must be at least 10 chars"),
+  startYear: z.string().min(4, "Start Year must be at least 4 chars").max(4, "Not More than 4 chars"),
   endYear: z
     .string()
     .optional()
-    .or(z.string().min(4, "End Year must be at least 4 chars").max(4)),
+    .or(z.string().min(4, "End Year must be at least 4 chars").max(4, "Not More than 4 chars")),
 });
 
 export const userExperienceValidationSchema = z.object({
