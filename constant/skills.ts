@@ -28,16 +28,28 @@ export const skills: SkillType = [
   { label: "Flask", value: "flask" },
   { label: "Ruby on Rails", value: "rails" },
   { label: "ASP.NET", value: "aspnet" },
+  { label: "Webpack", value: "webpack" },
+  { label: "Next.js", value: "nextjs" },
+  { label: "Svelte", value: "svelte" },
+  { label: "Gatsby", value: "gatsby" },
+  { label: "Nuxt.js", value: "nuxtjs" },
+  { label: "Tailwind CSS", value: "tailwindcss" },
+  { label: "Styled Components", value: "styled-components" },
 
   // Mobile Development
   { label: "React Native", value: "react-native" },
   { label: "Flutter", value: "flutter" },
   { label: "iOS (Swift, Objective-C)", value: "ios" },
   { label: "Android (Java, Kotlin)", value: "android" },
+  { label: "NativeScript", value: "nativescript" },
+  { label: "Xamarin", value: "xamarin" },
+  { label: "Ionic", value: "ionic" },
 
   // Database Management
   { label: "SQL (MySQL, PostgreSQL, etc.)", value: "sql" },
   { label: "NoSQL (MongoDB, Redis, etc.)", value: "nosql" },
+  { label: "Elasticsearch", value: "elasticsearch" },
+  { label: "Cassandra", value: "cassandra" },
 
   // Version Control
   { label: "Git", value: "git" },
@@ -53,24 +65,36 @@ export const skills: SkillType = [
   { label: "Google Cloud Platform (GCP)", value: "gcp" },
   { label: "CI/CD", value: "ci-cd" },
   { label: "Terraform", value: "terraform" },
+  { label: "Jenkins", value: "jenkins" },
+  { label: "Ansible", value: "ansible" },
+  { label: "Puppet", value: "puppet" },
+  { label: "Google Kubernetes Engine (GKE)", value: "gke" },
+  { label: "HashiCorp Vault", value: "vault" },
 
   // Software Testing
   { label: "Unit Testing", value: "unit-testing" },
   { label: "Integration Testing", value: "integration-testing" },
   { label: "Test Automation", value: "test-automation" },
   { label: "Performance Testing", value: "performance-testing" },
+  { label: "Load Testing", value: "load-testing" },
+  { label: "Security Testing", value: "security-testing" },
 
   // Software Architecture and Design Patterns
   { label: "Design Patterns", value: "design-patterns" },
   { label: "Microservices Architecture", value: "microservices" },
   { label: "RESTful APIs", value: "rest-api" },
   { label: "GraphQL", value: "graphql" },
+  { label: "Domain-Driven Design (DDD)", value: "ddd" },
+  { label: "Event-Driven Architecture (EDA)", value: "eda" },
+  { label: "Serverless Architecture", value: "serverless" },
 
   // Operating Systems and System Administration
   { label: "Linux/Unix", value: "linux" },
   { label: "Windows Server", value: "windows-server" },
   { label: "macOS", value: "macos" },
   { label: "Shell Scripting", value: "shell-scripting" },
+  { label: "Virtualization (VMware, VirtualBox)", value: "virtualization" },
+  { label: "CentOS", value: "centos" },
 
   // Other Essential Skills
   { label: "Agile Methodologies", value: "agile" },
@@ -83,10 +107,10 @@ export const skills: SkillType = [
   { label: "Software Documentation", value: "documentation" },
   { label: "Team Collaboration", value: "team-collaboration" },
   { label: "Project Management Tools", value: "project-management" },
-
-  // Specialized Areas
-  { label: "Machine Learning", value: "machine-learning" },
-  { label: "Data Science", value: "data-science" },
-  { label: "Cybersecurity Fundamentals", value: "cybersecurity" },
-  { label: "UI/UX Design", value: "ui-ux-design" },
+  { label: "Continuous Integration (CI)", value: "continuous-integration" },
+  { label: "Continuous Deployment (CD)", value: "continuous-deployment" },
+  { label: "Technical Writing", value: "technical-writing" },
+  { label: "Code Review", value: "code-review" },
+  { label: "UX Research", value: "ux-research" },
+  { label: "Quality Assurance (QA)", value: "qa" },
 ];
